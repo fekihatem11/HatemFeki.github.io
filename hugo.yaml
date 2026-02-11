@@ -1,5 +1,5 @@
 # ⚠️ If hosting under a repo path, use full URL (e.g. https://<github_username>.github.io/<repo_name>) or images won’t display correctly
-baseURL: https://fekihatem11.github.io/HatemFeki.github.io/
+baseURL: https://hatemfeki.com/
 
 languageCode: en-us
 title: "Hatem's Portfolio"
