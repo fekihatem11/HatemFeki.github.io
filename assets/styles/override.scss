@@ -474,20 +474,46 @@ html[data-theme='light'] {
   }
 }
 
+@keyframes navBlurFadeIn {
+  from {
+    opacity: 0;
+    filter: blur(8px);
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    filter: blur(0px);
+    transform: translateY(0);
+  }
+}
+
 .navbar, .navbar-expand-lg {
   background-color: var(--hero-bg-color) !important;
 
+  .navbar-collapse {
+    justify-content: center;
+  }
+
   .nav-link {
-    font-family: var(--font-ui);
-    font-size: var(--text-xs);
-    font-weight: 600;
+    font-family: var(--font-display);
+    font-size: 1.1rem;
+    font-weight: 400;
     text-transform: uppercase;
     letter-spacing: var(--tracking-wider);
     color: var(--hero-bone-color) !important;
     transition: color 0.2s ease;
+    opacity: 0;
+    animation: navBlurFadeIn 0.5s ease-out forwards;
 
     &:hover { color: var(--hero-text-color) !important; }
   }
+
+  .navbar-nav .nav-item:nth-child(1) .nav-link { animation-delay: 850ms; }
+  .navbar-nav .nav-item:nth-child(2) .nav-link { animation-delay: 950ms; }
+  .navbar-nav .nav-item:nth-child(3) .nav-link { animation-delay: 1050ms; }
+  .navbar-nav .nav-item:nth-child(4) .nav-link { animation-delay: 1150ms; }
+  .navbar-nav .nav-item:nth-child(5) .nav-link { animation-delay: 1250ms; }
+  .navbar-nav .nav-item:nth-child(6) .nav-link { animation-delay: 1350ms; }
 }
 
 // ============================================================

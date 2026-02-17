@@ -91,18 +91,18 @@
     <script>
         document.addEventListener("DOMContentLoaded", function () {
             
-            function animateBlurText(elementId, animateBy = 'letters', wordSpacing = '0.3em') {
+            function animateBlurText(elementId, animateBy = 'letters', wordSpacing = '0.3em', stagger = 100) {
                 const element = document.getElementById(elementId);
                 if (!element) return;
-                
+
                 const text = element.getAttribute('data-text');
                 const startDelay = parseInt(element.getAttribute('data-delay') || 0);
-                
+
                 // Clear content but preserve layout
                 element.innerHTML = '';
-                
+
                 const segments = animateBy === 'words' ? text.split(' ') : text.split('');
-                
+
                 segments.forEach((segment, i) => {
                     const span = document.createElement('span');
                     // Handle spaces for letter animation
@@ -117,7 +117,7 @@
                     span.style.transform = 'translateY(-20px)';
                     span.style.transition = `all 0.5s ease-out`;
                     span.style.display = 'inline-block';
-                    
+
                     if(animateBy === 'words') {
                         span.style.marginRight = wordSpacing;
                     }
@@ -129,15 +129,18 @@
                         span.style.opacity = '1';
                         span.style.filter = 'blur(0px)';
                         span.style.transform = 'translateY(0)';
-                    }, startDelay + (i * 100)); // Stagger delay
+                    }, startDelay + (i * stagger));
                 });
             }
 
             // Animate Parts in Original Layout
+            // Stagger tuned so hero-name and hero-role finish at roughly the same time:
+            //   hero-name: delay=300 + 9 letters × 50ms = ~750ms
+            //   hero-role: delay=600 + 1 word  × 150ms = ~750ms
             setTimeout(() => {
-                animateBlurText('hero-bg-text', 'letters');  // PORTFOLIO behind
-                animateBlurText('hero-name', 'letters');     // HATEM FEKI (Left)
-                animateBlurText('hero-role', 'words');       // SOFTWARE ENGINEER (Right)
+                animateBlurText('hero-bg-text', 'letters', '0.3em', 80);  // PORTFOLIO behind
+                animateBlurText('hero-name', 'letters', '0.3em', 50);     // HATEM FEKI (Left)
+                animateBlurText('hero-role', 'words', '0.3em', 150);      // SOFTWARE ENGINEER (Right)
                 
                 // Animate Image
                 const imgContainer = document.querySelector('.hero-image-container');
