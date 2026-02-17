@@ -664,20 +664,6 @@ html[data-theme='light'] .footer {
       margin-top: 2rem;
     }
 
-    .hero-link {
-      font-size: 0.9rem;
-      font-weight: 600;
-      text-transform: uppercase;
-      color: var(--hero-text-color);
-      text-decoration: none;
-      letter-spacing: 0.1em;
-      margin-bottom: 1rem;
-      transition: color 0.3s ease;
-      font-family: var(--font-display);
-
-      &:hover { color: var(--hero-accent-color); }
-    }
-
     .hero-name-block {
       display: flex;
       flex-direction: column;

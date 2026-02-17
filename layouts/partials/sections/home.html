@@ -1,0 +1,153 @@
+{{ $author := (index site.Data site.Language.Lang).author }}
+{{ $name := $author.name | default "HATEM FEKI" }}
+{{ $role := index $author.summary 0 | default "Software Engineer" }}
+{{ $role = replace $role "I am a " "" }}
+{{ $role = replace $role "I am an " "" }}
+{{ $imagePath := $author.image | default "images/author/hatem.jpg" }}
+{{ $image := resources.Get $imagePath }}
+
+<!-- Scroll Logic -->
+<script>
+    if (history.scrollRestoration) {
+        history.scrollRestoration = 'manual';
+    } else {
+        window.onbeforeunload = function () {
+            window.scrollTo(0, 0);
+        }
+    }
+    if (window.location.hash) {
+        window.scrollTo(0, 0);
+        setTimeout(function() {
+            window.scrollTo(0, 0);
+        }, 1);
+        history.replaceState('', document.title, window.location.pathname + window.location.search);
+    }
+    window.onload = function() {
+        window.scrollTo(0, 0);
+        setTimeout(function() {
+            window.scrollTo(0, 0);
+        }, 10);
+    };
+</script>
+
+
+<section id="custom-hero" class="container-fluid">
+    <!-- Background Text: "PORTFOLIO" -->
+    <div class="hero-bg-text blur-text-container" id="hero-bg-text" data-text="PORTFOLIO" data-delay="0"></div>
+
+    <div class="hero-wrapper">
+        <!-- LEFT COLUMN -->
+        <div class="hero-left">
+            <div class="hero-name-block">
+                <!-- Restored Full Name Layout but using BlurText container -->
+                <h1 class="hero-name blur-text-container" id="hero-name" data-text="HATEM FEKI" data-delay="300"></h1>
+                
+                <!-- Typing tagline animation below name -->
+                <span class="hero-welcome" id="typing-text" style="opacity: 0; transition: opacity 1s 1s;"></span>
+            </div>
+            
+            <script src="https://unpkg.com/typeit@8.7.1/dist/index.umd.js"></script>
+            <script>
+                document.addEventListener("DOMContentLoaded", function () {
+                    // Start TypeIt after other animations have started
+                    setTimeout(() => {
+                        document.getElementById('typing-text').style.opacity = '1';
+                        new TypeIt("#typing-text", {
+                            strings: ["WELCOME TO MY PORTFOLIO", "I LOVE AI AND AUTOMATION", "I AM A FITNESS ENTHUSIAST", "I LOVE FOOD"],
+                            speed: 60,
+                            loop: true,
+                            breakLines: false,
+                            nextStringDelay: 1000,
+                            deleteSpeed: 20
+                        }).go();
+                    }, 1000);
+                });
+            </script>
+        </div>
+
+        <!-- CENTER IMAGE -->
+        <div class="hero-image-container fade-in-scale">
+            {{ if $image }}
+                 <!-- Image returns to original context but keeps fade-in animation -->
+                <img src="{{ $image.RelPermalink }}" alt="Hatem Feki" class="hero-img">
+            {{ else }}
+                <div style="width: 300px; height: 400px; background: #333; display: flex; align-items: center; justify-content: center; color: white;">Image not found</div>
+            {{ end }}
+        </div>
+
+        <!-- RIGHT COLUMN -->
+        <div class="hero-right">
+            <div class="hero-role blur-text-container" id="hero-role" data-text="SOFTWARE ENGINEER" data-delay="600">
+            </div>
+        </div>
+    </div>
+    
+    <!-- SCROLL INDICATOR -->
+    <a href="#about" class="scroll-indicator fade-in-delay">
+        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-down"><polyline points="6 9 12 15 18 9"></polyline></svg>
+    </a>
+
+    <!-- Vanilla JS for BlurText Animation -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            
+            function animateBlurText(elementId, animateBy = 'letters', wordSpacing = '0.3em') {
+                const element = document.getElementById(elementId);
+                if (!element) return;
+                
+                const text = element.getAttribute('data-text');
+                const startDelay = parseInt(element.getAttribute('data-delay') || 0);
+                
+                // Clear content but preserve layout
+                element.innerHTML = '';
+                
+                const segments = animateBy === 'words' ? text.split(' ') : text.split('');
+                
+                segments.forEach((segment, i) => {
+                    const span = document.createElement('span');
+                    // Handle spaces for letter animation
+                    if (animateBy === 'letters' && segment === ' ') {
+                        span.innerHTML = '&nbsp;';
+                    } else {
+                        span.innerText = segment;
+                    }
+
+                    span.style.opacity = '0';
+                    span.style.filter = 'blur(10px)';
+                    span.style.transform = 'translateY(-20px)';
+                    span.style.transition = `all 0.5s ease-out`;
+                    span.style.display = 'inline-block';
+                    
+                    if(animateBy === 'words') {
+                        span.style.marginRight = wordSpacing;
+                    }
+
+                    element.appendChild(span);
+
+                    // Trigger animation
+                    setTimeout(() => {
+                        span.style.opacity = '1';
+                        span.style.filter = 'blur(0px)';
+                        span.style.transform = 'translateY(0)';
+                    }, startDelay + (i * 100)); // Stagger delay
+                });
+            }
+
+            // Animate Parts in Original Layout
+            setTimeout(() => {
+                animateBlurText('hero-bg-text', 'letters');  // PORTFOLIO behind
+                animateBlurText('hero-name', 'letters');     // HATEM FEKI (Left)
+                animateBlurText('hero-role', 'words');       // SOFTWARE ENGINEER (Right)
+                
+                // Animate Image
+                const imgContainer = document.querySelector('.hero-image-container');
+                if(imgContainer) imgContainer.classList.add('visible');
+
+                // Animate Scroll Indicator
+                const scrollInd = document.querySelector('.scroll-indicator');
+                if(scrollInd) scrollInd.classList.add('visible');
+
+            }, 100);
+        });
+    </script>
+</section>
