@@ -738,16 +738,14 @@ html[data-theme='light'] .footer {
 
     .hero-role {
       font-size: 2.5rem;
-      font-weight: 600;
-      font-style: italic;
+      font-weight: 400;
       text-transform: uppercase;
       color: var(--hero-bone-color);
       line-height: 1;
       text-align: right;
       display: flex;
       align-items: center;
-      gap: 0.5rem;
-      font-family: var(--font-ui);
+      font-family: var(--font-display);
       text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
 
       @include media-breakpoint-down(lg) {
@@ -764,13 +762,6 @@ html[data-theme='light'] .footer {
         filter: blur(10px);
         transform: translateY(20px);
         text-align: right;
-      }
-
-      &::before {
-        content: '■';
-        font-size: 1.5rem;
-        color: var(--hero-accent-color);
-        font-style: normal;
       }
     }
   }
