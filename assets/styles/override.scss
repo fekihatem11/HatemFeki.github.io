@@ -472,6 +472,11 @@ html[data-theme='light'] {
       background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%28216, 207, 188, 1%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
     }
   }
+
+  .navbar-nav {
+    margin-left: auto !important;
+    margin-right: auto !important;
+  }
 }
 
 @keyframes navBlurFadeIn {
@@ -508,12 +513,12 @@ html[data-theme='light'] {
     &:hover { color: var(--hero-text-color) !important; }
   }
 
-  .navbar-nav .nav-item:nth-child(1) .nav-link { animation-delay: 850ms; }
-  .navbar-nav .nav-item:nth-child(2) .nav-link { animation-delay: 950ms; }
-  .navbar-nav .nav-item:nth-child(3) .nav-link { animation-delay: 1050ms; }
-  .navbar-nav .nav-item:nth-child(4) .nav-link { animation-delay: 1150ms; }
-  .navbar-nav .nav-item:nth-child(5) .nav-link { animation-delay: 1250ms; }
-  .navbar-nav .nav-item:nth-child(6) .nav-link { animation-delay: 1350ms; }
+  .navbar-nav .nav-item:nth-child(1) .nav-link { animation-delay: 600ms; }
+  .navbar-nav .nav-item:nth-child(2) .nav-link { animation-delay: 650ms; }
+  .navbar-nav .nav-item:nth-child(3) .nav-link { animation-delay: 700ms; }
+  .navbar-nav .nav-item:nth-child(4) .nav-link { animation-delay: 750ms; }
+  .navbar-nav .nav-item:nth-child(5) .nav-link { animation-delay: 800ms; }
+  .navbar-nav .nav-item:nth-child(6) .nav-link { animation-delay: 850ms; }
 }
 
 // ============================================================
