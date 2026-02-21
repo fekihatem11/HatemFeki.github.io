@@ -7,6 +7,5 @@ import './core'
 import './features'
 import './sections'
 import './pages'
-import './navbar'
 
 feather.replace();
