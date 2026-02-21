@@ -458,7 +458,7 @@ html[data-theme='light'] {
   top: 0;
   width: 100%;
   z-index: 1000;
-  padding-top: 2rem !important;
+  padding-top: 4rem !important;
 
   .navbar-brand { display: none !important; }
 
@@ -490,33 +490,6 @@ html[data-theme='light'] {
   position: relative;
   gap: 0;
   margin: 0 auto;
-
-  // Tubelight glow indicator
-  &::before {
-    content: '';
-    position: absolute;
-    top: -2px;
-    left: var(--glow-left, 0);
-    width: var(--glow-width, 0);
-    height: 3px;
-    background: linear-gradient(90deg,
-      transparent 0%,
-      var(--hero-text-color) 50%,
-      transparent 100%
-    );
-    border-radius: 2px;
-    box-shadow:
-      0 0 8px var(--hero-text-color),
-      0 0 16px rgba(255, 251, 244, 0.6),
-      0 0 24px rgba(255, 251, 244, 0.3);
-    transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1),
-                width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    opacity: 0;
-  }
-
-  &.has-active::before {
-    opacity: 1;
-  }
 
   // Reset navbar-nav list styles
   .navbar-nav {
