@@ -5,7 +5,7 @@ section:
   template: sections/education.html
   enable: true
   weight: 4
-  showOnNavbar: true
+  showOnNavbar: false
 
 degrees:
 - name: Research Master — Software Engineering and AI
