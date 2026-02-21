@@ -189,3 +189,18 @@
     <img src="{{ $darkLogo }}" class="d-none" id="dark-logo" alt="Dark Logo">
   {{ end }}
 </nav>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const homeLink = document.querySelector('a[href*="#home"]');
+  if (homeLink) {
+    homeLink.addEventListener('click', function(e) {
+      e.preventDefault();
+      const heroSection = document.getElementById('custom-hero');
+      if (heroSection) {
+        heroSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    });
+  }
+});
+</script>
