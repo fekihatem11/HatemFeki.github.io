@@ -30,10 +30,11 @@ Use `/gsd:quick` to implement specific improvements as inspiration is discovered
 | # | Description | Date | Commit | Directory |
 |---|-------------|------|--------|-----------|
 | 1 | Reposition profile photo upward in round frame | 2026-02-22 | db125e3 | .planning/quick/1-reposition-profile-photo-upward-in-round |
+| 2 | Change TypeIt animation to stack sentences | 2026-02-22 | 3f9485c | .planning/quick/2-change-typeit-animation-to-stack-sentenc |
 
 ## Blockers/Concerns
 
 None currently.
 
 ---
-*Last activity: 2026-02-22 - Completed quick task 1: Reposition profile photo upward in round frame*
+*Last activity: 2026-02-22 - Completed quick task 2: Change TypeIt animation to stack sentences*
