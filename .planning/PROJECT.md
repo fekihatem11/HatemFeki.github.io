@@ -1,64 +1,84 @@
-# Hatem Feki — Portfolio Site
+# Portfolio Redesign
 
 ## What This Is
 
-A personal portfolio site for Hatem Feki (Software Engineer & AI Researcher at ETS Montréal), built with Hugo and the Toha theme, deployed as a static site on GitHub Pages at hatemfeki.com. The site showcases research publications, professional experience, education, projects, and skills — targeted at recruiters, collaborators, and the academic community.
+A bold, creative portfolio website that demonstrates both technical skills and design sensibility to potential employers. Built on Hugo + Toha theme foundation, heavily customized to stand out from typical developer portfolios.
 
 ## Core Value
 
-A polished, on-brand first impression that accurately reflects Hatem's research background and engineering experience.
+**Visitors should think: "This person has great taste and skills."**
+
+The portfolio must demonstrate design sensibility alongside technical capability — not just what you can build, but how thoughtfully you build it.
 
 ## Requirements
 
 ### Validated
 
-- ✓ Hugo static site deployed to GitHub Pages at hatemfeki.com — existing
-- ✓ Brand palette applied (Smoky Black #11120D, Floral White #FFFBF4, Olive Drab #565449, Bone #D8CFBC) — existing
-- ✓ Typography system established (Cormorant Garamond display, Mulish UI) — existing
-- ✓ Custom hero section with portrait, arch+wave mask, animated name/role — existing
-- ✓ All YAML content sections populated from CV (skills, experiences, education, projects, publications, achievements, accomplishments) — existing
-- ✓ Downloadable CV/resume PDF linked in about section — existing
-- ✓ Google Analytics configured (G-H4LBG7NDFZ) — existing
+<!-- Existing capabilities already working in production -->
+
+- ✓ Hugo 0.146.0 static site with Toha v4 theme — existing
+- ✓ Responsive Bootstrap 5.3.3 layout — existing
+- ✓ Custom SCSS override system (`assets/styles/override.scss`) — existing
+- ✓ Data-driven sections via YAML configuration (`data/en/sections/`) — existing
+- ✓ Animated hero section with TypeIt effects — existing
+- ✓ Custom navbar with smooth scrolling — existing
+- ✓ Portfolio sections: About, Skills, Projects, Education, Experiences, Publications, Accomplishments — existing
+- ✓ Deployed to GitHub Pages at hatemfeki.com — existing
+- ✓ Multi-language structure (English configured) — existing
 
 ### Active
 
-- [ ] Section design polish — skills, experience, education, projects, publications, achievements sections match brand
-- [ ] Mobile responsiveness — all sections layout correctly on phones and tablets
-- [ ] Content accuracy — verify all section content is current and accurate
-- [ ] Hero section finalized — portrait mask, positioning, sizing tuned
-- [ ] Experience/education logo images — either add missing logos or remove broken references
-- [ ] public/ directory gitignored — build artifacts not tracked in repo
+<!-- Modernization goals for this iteration -->
+
+- [ ] Visual design that feels modern, not dated (colors, spacing, typography)
+- [ ] Layout structure that's distinctive, not template-default
+- [ ] Content presentation that showcases projects/work compellingly
+- [ ] Modern interactions and animations that enhance the experience
+- [ ] Hero section that makes a strong first impression
+- [ ] Project showcase that demonstrates technical depth
+- [ ] About section that communicates personality and expertise
+- [ ] Overall aesthetic that's bold and creative, not minimal/safe
 
 ### Out of Scope
 
-- Multi-language support (Bengali) — deleted content, English-only going forward
-- Blog / notes section — content removed, not part of this portfolio
-- Contact form backend — no server-side processing; static site only
-- CMS / admin interface — content managed via YAML files in git
+- Complete rebuild on different tech stack — keeping Hugo + Toha foundation
+- Multi-language implementation — focus on English first
+- Blog functionality changes — existing post system is sufficient
+- Backend features — this is a static portfolio site
 
 ## Context
 
-- Stack: Hugo v0.146.0 extended, Toha v4 theme (local git submodule), Bootstrap 5.3.3, SCSS
-- Deployment: GitHub Actions → GitHub Pages, custom domain hatemfeki.com
-- Customization pattern: Override theme via `assets/styles/override.scss` + `layouts/partials/sections/` files
-- Known tech debt: TypeIt loaded from external CDN (should use local npm bundle), `public/` not gitignored, missing skill/experience logo images
-- Design work happens iteratively — user identifies a section, requests changes, Claude implements
+**Current State:**
+- Working Hugo + Toha v4 portfolio deployed to production
+- Custom SCSS overrides already in place for brand colors and typography
+- Data-driven architecture allows content updates without template changes
+- Bootstrap 5.3.3 provides responsive foundation
+- Current design feels dated across visual design, layout, content presentation, and interactions
+
+**Inspiration Phase:**
+- Actively seeking modern portfolio examples
+- Goal is to find inspiration and implement what resonates
+- "Done" means finding compelling examples and adapting them to this portfolio
+
+**Target Audience:**
+- Potential employers and recruiters
+- Looking to evaluate both technical skills and design taste
+- First impression matters — portfolio should be memorable
 
 ## Constraints
 
-- **Tech stack**: Hugo + Toha theme — no React, no build system changes
-- **Static only**: No backend, no form handling, no databases
-- **Theme boundary**: Customize via override.scss and layout overrides only; don't modify `themes/toha/` directly (git submodule)
-- **Content format**: All content lives in `data/en/sections/*.yaml` — no markdown posts
+- **Tech Stack:** Hugo + Toha theme foundation must remain — customize heavily via SCSS/layouts, don't rebuild from scratch
+- **Domain:** hatemfeki.com is the production URL
+- **Deployment:** GitHub Pages via GitHub Actions (existing workflow should continue working)
+- **Approach:** Discovery-driven — find inspiration, then implement
 
 ## Key Decisions
 
 | Decision | Rationale | Outcome |
 |----------|-----------|---------|
-| Cormorant Garamond for display font | Matches editorial/academic tone of the brand palette | — Pending evaluation |
-| Arch + wave SVG mask for portrait | Creates distinctive portrait shape instead of generic circle | — Pending evaluation |
-| Single-language (EN only) | Simplified maintenance; removed .bn.md files | ✓ Good |
-| Keep Toha theme as submodule | Faster than building from scratch; override via SCSS | — Pending |
+| Keep Hugo + Toha, customize heavily | Foundation works, want to focus on design not infrastructure | — Pending |
+| Bold/creative over minimal/safe | Want to stand out and demonstrate design sensibility | — Pending |
+| Inspiration-driven development | Don't have concrete vision yet, will discover through examples | — Pending |
 
 ---
-*Last updated: 2026-02-16 after initialization*
+*Last updated: 2026-02-22 after initialization*
