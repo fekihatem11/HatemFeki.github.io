@@ -1,277 +1,199 @@
 # Codebase Structure
 
-**Analysis Date:** 2026-02-16
+**Analysis Date:** 2026-02-22
 
 ## Directory Layout
 
 ```
 my-portfolio/
-├── .github/                    # GitHub Actions CI/CD configuration
-├── .planning/                  # GSD planning documents
-│   └── codebase/              # Codebase analysis documents
-├── assets/                     # Site-specific assets compiled during build
-│   ├── images/                # Section-specific images (author, skills, projects, etc.)
-│   │   ├── author/            # Author/profile images
-│   │   ├── site/              # Site logos and backgrounds
-│   │   └── sections/          # Category-specific images
-│   ├── styles/                # Custom SCSS overrides
-│   └── jsconfig.json          # JavaScript configuration
-├── content/                    # Blog posts and notes (currently minimal)
-│   ├── posts/                 # Blog post content
-│   └── notes/                 # Note content
-├── data/                       # Content configuration as YAML
-│   └── en/                     # English language content
-│       ├── author.yaml        # Author metadata (name, contacts, bio)
-│       ├── site.yaml          # Site metadata (copyright, description, OpenGraph)
-│       └── sections/          # Portfolio sections configuration
-│           ├── about.yaml     # About section with designation and social links
-│           ├── skills.yaml    # Skills with categories and logos
-│           ├── projects.yaml  # Project portfolio with tags
-│           ├── experiences.yaml  # Work experience timeline
-│           ├── education.yaml # Education history timeline
-│           ├── achievements.yaml # Achievements/certifications section
-│           ├── accomplishments.yaml # Accomplishments with badges
-│           ├── publications.yaml # Research publications
-│           ├── featured-posts.yaml # Featured blog posts
-│           └── recent-posts.yaml # Recent posts listing
-├── layouts/                    # Custom/override templates
-│   ├── index.html             # Homepage layout (main entry point)
-│   └── partials/              # Custom partial overrides
-│       └── sections/
-│           └── home.html      # Custom hero/home section
-├── static/                     # Static assets served as-is
-│   ├── files/                 # Downloadable files (resume PDFs, etc.)
-│   ├── videos/                # Video files
-│   ├── CNAME                  # Custom domain configuration (hatemfeki.com)
-│   ├── flags/                 # Language flag icons (mounted from node_modules)
-│   └── fonts/                 # Font files (mounted from katex, fontsource)
-├── themes/                     # Hugo themes
-│   └── toha/                  # Toha theme (v4) - git submodule with local replacement
-│       ├── layouts/           # Theme templates
-│       ├── assets/            # Theme assets (SCSS, JS)
-│       ├── data/              # Theme default data
-│       ├── i18n/              # Internationalization files
-│       ├── exampleSite/       # Example site configuration
-│       └── [theme code...]    # Theme logic and components
-├── public/                     # Generated output (build artifact)
-├── resources/                  # Hugo resource cache (generated)
-├── archetypes/                 # Content templates for new posts
-├── i18n/                       # Site-level i18n overrides
-├── Branding/                   # Branding assets (logos, guidelines)
-├── Makefile                    # Build automation
-├── hugo.yaml                   # Hugo configuration (build settings, theme imports, features)
-├── go.mod                      # Go module file (Hugo module management)
-├── go.sum                      # Go module checksums
-├── package.json                # Node.js dependencies (theme assets: Bootstrap, FontAwesome, etc.)
-├── package-lock.json           # Node.js lockfile
-└── .gitignore                  # Git ignore rules
+├── .planning/              # GSD planning and documentation
+│   └── codebase/          # Codebase analysis documents
+├── .github/               # GitHub configuration
+│   └── workflows/         # GitHub Actions CI/CD workflows
+├── assets/                # Custom assets for branding
+│   ├── styles/           # Custom SCSS overrides
+│   ├── scripts/          # Custom JavaScript entry point
+│   └── images/           # Author and site images
+├── data/                 # YAML configuration for content
+│   └── en/              # English language data files
+│       ├── sections/    # Portfolio section definitions
+│       ├── author.yaml  # Author profile information
+│       └── site.yaml    # Global site metadata
+├── content/             # Blog posts and notes (markdown)
+│   ├── posts/          # Blog post directories
+│   └── notes/          # Educational notes/documentation
+├── layouts/             # Custom HTML templates
+│   └── partials/       # Template partials for reuse
+│       ├── sections/   # Portfolio section templates
+│       └── navigators/ # Navigation bar templates
+├── static/             # Static files (no processing)
+│   ├── videos/        # Video assets
+│   └── files/         # Document downloads
+├── themes/             # Theme directory
+│   └── toha/          # Toha Hugo theme (git submodule)
+│       ├── layouts/   # Theme default templates
+│       ├── assets/    # Theme styles and scripts
+│       └── i18n/      # Theme translations
+├── public/            # Generated site (not committed)
+├── resources/         # Hugo cache directory (not committed)
+├── archetypes/        # Hugo content templates
+├── Makefile          # Build and deployment commands
+├── hugo.yaml         # Hugo configuration
+├── go.mod / go.sum   # Hugo module dependencies
+├── package.json      # npm dependencies
+└── .gitignore       # Git exclusions
 ```
 
 ## Directory Purposes
 
-**assets/**
-- Purpose: Site-specific assets that get processed/compiled during Hugo build
-- Contains: SCSS overrides, author images, skill/project logos, section images
-- Generated: No - these are source files
-- Committed: Yes - all source assets committed to git
-- Note: Images organized by section (skills, projects, experiences, education, achievements)
+**assets/:**
+- Purpose: Brand-specific customization and overrides
+- Contains: SCSS stylesheets, JavaScript initialization, site-specific images
+- Key files: `override.scss` (brand colors, typography, component styles), `application.js` (npm imports and initialization)
 
-**data/en/sections/**
-- Purpose: Content configuration for all portfolio sections
-- Contains: YAML files defining section metadata and content arrays (skills, projects, experiences, etc.)
-- Key pattern: Each file has `section:` metadata object + content array(s)
-- Section weight determines ordering in navbar and page layout
-- `enable: true/false` controls visibility of entire section
+**data/en/:**
+- Purpose: Structured data source for dynamic portfolio sections
+- Contains: YAML files defining content for each portfolio section
+- Key files: `author.yaml` (personal info), `site.yaml` (SEO/site metadata), `sections/*.yaml` (About, Skills, Projects, Experience, Education, Achievements, Accomplishments, Publications)
 
-**data/en/**
-- Purpose: Root content configuration
-- author.yaml: Personal information (name, email, GitHub, LinkedIn, bio/summary)
-- site.yaml: Site metadata for footer and SEO (copyright, description, OpenGraph)
+**layouts/partials/:**
+- Purpose: Custom template partials for theme extension
+- Contains: Portfolio-specific section layouts and navigation components
+- Key files: `sections/home.html` (hero section with animations), `navigators/navbar.html` (navigation bar)
 
-**layouts/index.html**
-- Purpose: Main homepage template
-- Responsibility: Orchestrates page structure and section rendering
-- Process: Reads hugo.yaml config, loads data, conditionally renders sections, includes partials
+**content/:**
+- Purpose: Blog posts and educational notes (currently disabled in config)
+- Contains: Markdown files organized by category and language
+- Structure: Language-specific subdirectories with index files and asset folders
 
-**layouts/partials/sections/home.html**
-- Purpose: Custom hero/landing section (overrides theme default)
-- Contains: Complex grid layout for hero banner with author image, greeting, name, role
-- Styling: Uses custom CSS variables from override.scss
+**themes/toha/:**
+- Purpose: Base theme providing default layouts, styles, and scripts
+- Contains: Complete Hugo theme imported via git submodule and Hugo modules
+- Note: Do not edit directly; use customization layer in assets/ instead
 
-**static/**
-- Purpose: Assets served directly without processing
-- CNAME: Custom domain file for GitHub Pages
-- files/: Downloadable resources (PDFs, documents)
-- videos/: Video files for hero or sections
-- flags/, fonts/: Mounted from node_modules during build
+**static/:**
+- Purpose: Assets served as-is (no processing by Hugo)
+- Contains: Videos, downloadable files, static documents
+- Key files: None (custom user additions go here)
 
-**themes/toha/**
-- Purpose: Hugo theme providing UI components, partials, and base styling
-- Status: Git submodule with local file replacement (via go.mod)
-- Key directories:
-  - `layouts/partials/sections/`: Individual section templates (skills.html, projects.html, etc.)
-  - `layouts/partials/cards/`: Component templates for list items (skill.html, post.html, etc.)
-  - `assets/`: Bootstrap framework, SCSS base styles, JavaScript utilities
-
-**assets/styles/override.scss**
-- Purpose: Site-wide style customization
-- Pattern: Uses CSS custom properties to override theme defaults
-- Key variables: `--hero-bg-color`, `--hero-text-color`, `--hero-accent-color`, `--hero-bone-color`
-- Scope: Overrides section backgrounds, text colors, card styles, timeline styling, footer
-
-**public/**
-- Purpose: Built output directory
-- Contains: All generated HTML, CSS, JavaScript, and assets
-- Generated: Yes - during `hugo` or `hugo server` build
-- Committed: No - added to .gitignore
-
-**resources/**
-- Purpose: Hugo resource cache and processed assets
-- Generated: Yes - during build process
-- Contains: Compiled SCSS, processed images, fingerprinted assets
-- Committed: No - cache directory
+**.planning/:**
+- Purpose: GSD planning documents and project state
+- Contains: Codebase analysis, quick task plans, project state tracking
+- Key files: `codebase/` analysis documents (ARCHITECTURE.md, STRUCTURE.md, etc.)
 
 ## Key File Locations
 
 **Entry Points:**
-- `layouts/index.html`: Main page template, orchestrates all sections and partials
-- `hugo.yaml`: Build configuration with module imports and feature flags
+- `hugo.yaml`: Main Hugo configuration and build entry point
+- `layouts/partials/sections/home.html`: Custom hero section template
+- `assets/scripts/application.js`: JavaScript entry point for npm bundling
 
 **Configuration:**
-- `hugo.yaml`: Hugo build settings, language config, feature enablement (analytics, comments, etc.)
-- `go.mod`: Hugo module dependencies (toha/v4 theme replacement)
-- `package.json`: Node.js dependencies (Bootstrap, FontAwesome, highlight.js, fuse.js, etc.)
+- `hugo.yaml`: Hugo build config, feature toggles, baseURL, module imports
+- `data/en/site.yaml`: Site-wide SEO, copyright, disclaimer, footer config
+- `data/en/author.yaml`: Author profile (name, contact, summary)
+- `package.json`: npm dependencies (Bootstrap, FontAwesome, etc.)
 
-**Core Logic (Theme):**
-- `themes/toha/layouts/partials/sections/*.html`: Individual section renderers (about.html, skills.html, projects.html, experiences.html, education.html)
-- `themes/toha/layouts/partials/cards/*.html`: Individual item renderers (skill.html, post.html, accomplishment.html)
-- `themes/toha/layouts/partials/navigators/navbar.html`: Navigation bar
+**Core Logic:**
+- `layouts/partials/navigators/navbar.html`: Dynamic navigation bar with section links and logo swapping
+- `layouts/partials/sections/home.html`: Hero section with BlurText animation, TypeIt typing animation, scroll handler
+- `assets/styles/override.scss`: Brand color system, typography scale, section-specific styles
+- `assets/scripts/application.js`: Dependency imports (Bootstrap, FontAwesome, custom icons)
 
-**Content:**
-- `data/en/author.yaml`: Author metadata
-- `data/en/site.yaml`: Site metadata
-- `data/en/sections/*.yaml`: Portfolio content (skills, projects, experiences, education, achievements, accomplishments, publications)
+**Portfolio Content:**
+- `data/en/sections/about.yaml`: About section content
+- `data/en/sections/skills.yaml`: Skills with categories
+- `data/en/sections/projects.yaml`: Project showcase cards
+- `data/en/sections/experiences.yaml`: Work experience timeline
+- `data/en/sections/education.yaml`: Education timeline
+- `data/en/sections/achievements.yaml`: Awards and recognitions
+- `data/en/sections/accomplishments.yaml`: Accomplishments
+- `data/en/sections/publications.yaml`: Research/article publications
 
 **Styling:**
-- `assets/styles/override.scss`: Custom CSS overrides for theme
-- `themes/toha/assets/`: Theme base styles (Bootstrap, base SCSS)
-
-**Customization:**
-- `layouts/partials/sections/home.html`: Custom hero section
+- `assets/styles/override.scss`: Custom SCSS with CSS variable system and component overrides
 
 ## Naming Conventions
 
 **Files:**
-- Config files: `hugo.yaml`, `go.mod`, `package.json` (snake_case with .yaml/.json extension)
-- Data files: `author.yaml`, `site.yaml`, `{section-name}.yaml` (kebab-case)
-- Templates: `{section-name}.html`, `{component-name}.html` (kebab-case)
-- Styles: `override.scss` (descriptive name for customization)
-- Images: descriptive names like `hatem.jpg`, `tensorflow.png`, `kubernetes.png`
+- Configuration: `hugo.yaml`, `package.json`
+- YAML data files: Lowercase with hyphens (`author.yaml`, `site.yaml`)
+- HTML templates: Lowercase with hyphens (`home.html`, `navbar.html`)
+- SCSS files: Lowercase with hyphens (`override.scss`)
+- JavaScript files: camelCase (`application.js`)
 
 **Directories:**
-- Content sections: `sections/` contains multiple section YAML files
-- Language-specific: `en/`, `bn/` (ISO language codes)
-- Type-based: `cards/`, `navigators/`, `misc/`, `comments/` (functional grouping)
-- Asset types: `images/`, `styles/`, `scripts/` (resource category)
+- Features: Lowercase with hyphens (`partials/`, `sections/`, `navigators/`)
+- Language codes: Two-letter codes (`en/`, `bn/`)
+- Content organization: Logical categories (`posts/`, `notes/`, `images/`, `scripts/`, `styles/`)
 
-**Naming for Portfolio Content:**
-- Skill names: Title case (e.g., "Kubernetes", "Go Development", "Docker")
-- Project tags: lowercase, descriptive (e.g., "professional", "kubernetes", "machine-learning")
-- Section ids: kebab-case, must match partial names (e.g., `about`, `skills`, `projects`, `experiences`)
-- Image paths: `/images/sections/{category}/{name}.{ext}` (e.g., `/images/sections/skills/kubernetes.png`)
+**HTML Classes/IDs:**
+- Classes: Kebab-case (`.navbar-pill-container`, `.hero-image-container`, `.section-title`)
+- IDs: Kebab-case with functional prefixes (`#hero-name`, `#custom-hero`, `#top-navbar`)
+- Data attributes: Kebab-case (`data-delay`, `data-text`, `data-theme`)
+
+**CSS Variables:**
+- Color variables: `--hero-bg-color`, `--hero-text-color`, `--hero-accent-color`
+- Typography: `--font-display`, `--font-ui`, `--text-base`, `--text-lg`
+- Spacing: `--tracking-normal`, `--tracking-wide`, `--tracking-wider`
 
 ## Where to Add New Code
 
 **New Portfolio Section:**
-1. Create data file: `data/en/sections/{section-id}.yaml`
-   - Define `section:` metadata (name, id, enable, weight, showOnNavbar)
-   - Add content array(s) for items
-2. Theme already has partial at `themes/toha/layouts/partials/sections/{section-id}.html` - use as-is OR
-3. Create custom partial override at `layouts/partials/sections/{section-id}.html` if custom styling needed
-4. Section will auto-render in homepage via Hugo template loop
+1. Create YAML data file: `data/en/sections/[section-name].yaml`
+2. Reference theme template (theme handles rendering) or override in: `layouts/partials/sections/[section-name].html`
+3. Add styling rules in: `assets/styles/override.scss` targeting `.` + section class
+4. Register in: `hugo.yaml` features if feature-gated
 
-**New Skill/Project/Experience Entry:**
-- Edit appropriate YAML file in `data/en/sections/` (skills.yaml, projects.yaml, experiences.yaml, etc.)
-- Add new entry to the items array with required fields (name, logo, summary, etc.)
-- Theme will automatically render as new card in that section
+**Custom Component/Template:**
+- Custom partials: `layouts/partials/[category]/[component-name].html`
+- Include in templates using: `{{ partial "category/component-name" . }}`
 
-**Custom Styling:**
-- Edit `assets/styles/override.scss`
-- Define new CSS classes or modify existing selectors
-- Use CSS variables for colors to match theme: `--hero-bg-color`, `--hero-text-color`, etc.
+**Styling Changes:**
+- All branding changes: `assets/styles/override.scss` using CSS variables defined at top
+- Do NOT edit `themes/toha/assets/` directly
+- Use `!important` only when necessary to override theme defaults
 
-**New Custom Component:**
-- Create partial at `layouts/partials/{type}/{name}.html`
-- Component receives context from parent template via `{{ partial "path/to/partial.html" . }}`
-- Import and use in appropriate parent template
+**JavaScript/Interactivity:**
+- New feature modules: `assets/scripts/features/[feature-name].js`
+- Import in: `assets/scripts/application.js`
+- Inline scripts acceptable for single-page animations (see `home.html` hero animations)
 
-**New Static Asset:**
-- Image: Place in `assets/images/sections/{category}/` and reference as `/images/sections/category/filename.ext`
-- File (PDF, doc): Place in `static/files/` and link as `/files/filename.ext`
-- Font/library asset: Use npm to add to package.json, Hugo will mount during build
-
-**Build Automation:**
-- Add commands to `Makefile`
-- Current commands: `make run` (development server), `make deploy` (git push to trigger GitHub Actions)
+**Static Assets:**
+- Images: `assets/images/` for processed images or `static/images/` for static files
+- Videos: `static/videos/`
+- Documents: `static/files/`
 
 ## Special Directories
 
-**themes/toha/**
-- Purpose: Hugo theme with git replacement via go.mod
-- Status: Git submodule but replaced with local directory
-- Generated: No - theme code maintained in separate repo
-- Committed: No - linked via go.mod replacement, not committed to main repo
+**themes/toha/:**
+- Purpose: Base theme from Hugo registry
+- Generated: No (git submodule)
+- Committed: Yes (via .gitmodules reference)
+- Edit Policy: Never edit directly; customize via `assets/` and `layouts/` overrides
 
-**public/**
-- Purpose: Generated site output
-- Generated: Yes - `hugo` command creates entire directory
-- Committed: No - .gitignore prevents committing
+**public/:**
+- Purpose: Generated static site
+- Generated: Yes (Hugo build output)
+- Committed: No (in .gitignore)
+- Do NOT manually edit
 
-**resources//**
-- Purpose: Hugo build cache and processed assets
-- Generated: Yes - created during build process
-- Committed: No - cache only, can be regenerated
+**resources/:**
+- Purpose: Hugo resource cache (compiled SCSS, images, etc.)
+- Generated: Yes (Hugo build process)
+- Committed: No (in .gitignore)
 
-**node_modules/**
-- Purpose: Node.js package dependencies
-- Generated: Yes - `npm install` creates directory
-- Committed: No - .gitignore prevents committing
+**.planning/codebase/:**
+- Purpose: GSD codebase analysis and documentation
+- Generated: Yes (by GSD map-codebase command)
+- Committed: Yes
+- Contents: ARCHITECTURE.md, STRUCTURE.md, CONVENTIONS.md, TESTING.md, STACK.md, INTEGRATIONS.md, CONCERNS.md
 
-**.planning/codebase/**
-- Purpose: GSD codebase documentation
-- Generated: Yes - created by GSD mapping tools
-- Committed: Yes - documentation stored in git
-
-**.github/**
-- Purpose: GitHub Actions workflows
-- Contains: CI/CD configuration for building and deploying site
-- Committed: Yes - workflow definitions version controlled
-
-## Build and Deployment Flow
-
-**Development:**
-```bash
-make run                    # Starts Hugo dev server on localhost:1313
-# Edits to data/*, assets/*, layouts/* hot-reload
-```
-
-**Production Deploy:**
-```bash
-make deploy msg="message"   # Commits all changes and pushes to main
-# GitHub Actions automatically builds and deploys to GitHub Pages
-```
-
-**Build Process:**
-1. Hugo reads `hugo.yaml` configuration
-2. Loads Hugo module from `go.mod` (toha/v4 theme)
-3. Processes `node_modules/` mounted assets (flags, fonts, Bootstrap, etc.)
-4. Reads all `data/en/` YAML files into template context
-5. Renders `layouts/index.html` with data
-6. Each section includes corresponding theme partial or custom override
-7. Compiles `assets/styles/override.scss` with theme SCSS
-8. Bundles JavaScript with fingerprinting
-9. Outputs all files to `public/` directory
+**node_modules/:**
+- Purpose: npm dependencies
+- Generated: Yes (npm install)
+- Committed: No (in .gitignore)
 
 ---
 
-*Structure analysis: 2026-02-16*
+*Structure analysis: 2026-02-22*

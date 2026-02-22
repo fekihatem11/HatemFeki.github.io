@@ -1,168 +1,188 @@
 # Coding Conventions
 
-**Analysis Date:** 2026-02-16
+**Analysis Date:** 2026-02-22
 
 ## Naming Patterns
 
 **Files:**
-- Kebab-case for feature modules: `theme-scheme.js`, `insertScript.js`
-- Kebab-case for directory names: `features/`, `sections/`, `core/`
-- Barrel files use `index.js` convention: `core/index.js`, `features/index.js`
+- JavaScript files use lowercase with hyphens for multi-word names: `theme-scheme.js`, `insertScript.js`
+- Configuration files use camelCase with dots: `.eslintrc.yml`, `.prettierrc.yml`
+- HTML template files use lowercase with hyphens: `navbar-2.html`, `footer.html`
+- SCSS/CSS override files match their purpose: `override.scss`
 
 **Functions:**
-- camelCase for all function names: `toggleSidebar()`, `getDeviceState()`, `setScheme()`
-- Private helper functions within modules use camelCase: `fourColumnRow()`, `loadScheme()`, `setImages()`
-- Event handler functions typically descriptive: `updateNavBar()`, `toggleCourseVisibility()`, `toggleTOC()`
+- camelCase for function names: `updateNavBar()`, `toggleSidebar()`, `detectDeviceState()`, `getDeviceState()`, `insertScript()`
+- Private helper functions use camelCase: `toggleCourseVisibility()`, `addCopyButtons()`, `setScheme()`, `getPreferredColorScheme()`
+- Exported functions clearly marked with `export`: `export const insertScript = ...`
 
 **Variables:**
-- camelCase for variable names: `deviceState`, `theme`, `sidebar`
-- Constants use UPPER_SNAKE_CASE: `PERSISTENCE_KEY`, `FEATURE_VIDEOPLAYER`
-- DOM references use `$` prefix by convention in some cases (e.g., `$icon`, `$img`)
+- camelCase for all variable names: `deviceState`, `topNavbar`, `navbarToggler`, `themeIcon`, `scriptTag`
+- Constants use UPPERCASE_SNAKE_CASE: `PERSISTENCE_KEY`, `THEME_DARK`, `THEME_LIGHT`, `THEME_DEFAULT`
+- Single-letter or short variables acceptable only for loop iterators: `el`, `btn`, `e` (event)
+- DOM element references prefixed with `$` or descriptive names: `$icon`, `$img`, `topNavbar`
 
-**Types/Objects:**
-- Objects use camelCase property names: `deviceState = { isMobile: false, isTablet: false, isLaptop: false }`
-- Data attributes in HTML use kebab-case: `data-section`, `data-scheme`, `data-theme`
+**Types:**
+- No TypeScript configuration detected. codebase is vanilla JavaScript.
+- JSDoc comments describe function parameters and return values
+
+**CSS/SCSS:**
+- CSS custom properties (variables) use lowercase with hyphens: `--hero-bg-color`, `--hero-text-color`, `--text-xs`, `--tracking-wide`
+- BEM-like class naming with hyphens: `navbar-collapse`, `card-title`, `hero-wrapper`, `logo-holder`
+- SCSS nesting follows component structure, not deep nesting (max 3-4 levels)
+- Media query breakpoints reference Bootstrap mixins: `@include media-breakpoint-down(md)`, `@include media-breakpoint-up(md)`
 
 ## Code Style
 
 **Formatting:**
-- Prettier config (`themes/toha/.prettierrc.yml`):
-  - `printWidth: 100` - Lines wrap at 100 characters
-  - `tabWidth: 2` - Indent with 2 spaces
-  - `semi: false` - No semicolons
-  - `singleQuote: true` - Use single quotes
-  - `trailingComma: "all"` - Trailing commas in multi-line structures
+- Tool: Prettier
+- Print width: 100 characters
+- Tab width: 2 spaces
+- Semicolons: disabled (semi: false)
+- Quotes: single quotes ('string' not "string")
+- Trailing commas: enabled for all (trailing-comma: "all")
 
 **Linting:**
-- ESLint config (`themes/toha/.eslintrc.yml`):
-  - Extends `standard` configuration
-  - Includes `plugin:no-jquery/all` for jQuery avoidance
-  - Extends `prettier` for formatting consistency
-  - `ecmaVersion: latest` - Latest JavaScript features
-  - `sourceType: module` - ES modules
+- Tool: ESLint with standard config
+- Environment: browser and ES2021
+- Extensions: `eslint-config-prettier` (disables conflicts with Prettier)
+- Special plugin: `eslint-plugin-no-jquery` with all rules enabled (encourages vanilla JavaScript)
+- Parser options: ES modules with latest ECMAVersion
+
+**Key ESLint Rules:**
+- No jQuery usage enforced via `eslint-plugin-no-jquery/all`
+- Standard JS rules applied (`eslint-config-standard`)
+- Configuration: `/Users/artem/Desktop/Personal-projects/my-portfolio/themes/toha/.eslintrc.yml`
 
 ## Import Organization
 
 **Order:**
-1. External libraries/frameworks: `import Filterizr from 'filterizr'`, `import 'bootstrap'`
-2. Internal modules: `import { getDeviceState } from '../core/device'`
-3. Side effects: `import '@fortawesome/fontawesome-free/js/all'`
+1. Third-party libraries: `import 'popper.js'`, `import 'bootstrap'`, `import '@fortawesome/fontawesome-free/js/all'`
+2. Named package imports: `import Filterizr from 'filterizr'`, `import feather from 'feather-icons'`
+3. Relative module imports: `import { insertScript } from '../core'`, `import { getDeviceState } from '../core/device'`
+4. Hugo parameters: `import * as params from '@params'`
 
 **Path Aliases:**
-- Uses relative imports with `../` paths
-- Barrel exports for module organization: `export * from './device'`, `export * from './insertScript'`
-- Hugo params imported via `import * as params from '@params'` for configuration
+- `@params` maps to Hugo build parameters
+- Theme assets use relative imports: `../core`, `../core/device`
+- Barrel files used for organizing exports: `export * from './device'` in `core/index.js`
+
+**Module Loading Pattern:**
+- ES module syntax: `import` / `export`
+- Hugo handles bundling and minification
+- Modules loaded via `application.js` entry point in `assets/scripts/`
 
 ## Error Handling
 
 **Patterns:**
-- Early returns for null/undefined checks: `if (sidebar == null) { return }`
-- Loose equality (`==`) used for null checks: `if (element == null)` checks both null and undefined
-- Ternary operators for default values: `const value = localStorage.getItem(key) || 'default'`
-- Try-catch not explicitly visible in main code; async/await used where needed
-- Errors silently handled with early returns rather than explicit throw statements
+- Null/undefined checks using optional chaining: `topNavbar?.classList.remove()`, `menu?.getElementsByTagName()`
+- Explicit null comparison: `if (menu == null)` and `if (sidebar == null)` (not `!menu`)
+- Guard clauses to return early: `if (sidebar == null) { return }`
+- Defensive DOM selection: `document.getElementById()` returns null if not found, checked before use
+- try/catch not observed in codebase; errors not explicitly thrown
+- Async operations: `window.addEventListener('load', async () => { ... })`
+
+**Error Prevention:**
+- DOM elements checked before method calls
+- Array operations use `Array.from()` for NodeLists to ensure array methods available
+- Default values provided in ternary operators: `typeof themeOptions.dark === 'undefined' ? true : themeOptions.dark`
+- LocalStorage operations wrapped in functions without error handling (assumes browser API available)
 
 ## Logging
 
-**Framework:** `console.log()` for debugging
+**Framework:** console (no logging framework detected)
 
 **Patterns:**
-- Debugging statements left in code: `console.log(i)` appears in `sections/achievements.js` line 56
-- No structured logging framework
-- No log level management
+- No logging calls found in codebase (debugging via browser DevTools)
+- Comments used for inline documentation instead of console logs
+- Event handlers and state changes rely on DOM mutations for side effects
 
 ## Comments
 
 **When to Comment:**
-- Comments explain "why" not "what"
-- Inline comments for complex logic: `// returns a copy of the device state` before `export function`
-- Section headers with dividers: `// ================== Project cards =====================`
-- Comments document non-obvious behavior: `// if toc-section is open, then close it first`
-- Comments explain business logic: `// if it is mobile device. then scroll to top.`
+- Use comments for non-obvious logic or browser API interactions
+- Document event binding intentions: `// bind click event to #sidebar-toggler in navbar-2.html`
+- Explain complex selectors or CSS workarounds
 
 **JSDoc/TSDoc:**
-- Not used; no type annotations or formal documentation
-- Plain JavaScript without TypeScript
+- Not systematically used
+- Function documentation through inline comments instead
+- Example: `// returns a copy of the device state so other parts of code can't override this.` in `device.js`
+
+**Comment Style:**
+- Single-line comments: `// comment`
+- Multi-line comments for section headers in SCSS:
+  ```scss
+  // ============================================================
+  // SECTION NAME
+  // ============================================================
+  ```
 
 ## Function Design
 
-**Size:** Functions are generally small (5-30 lines), with clear single responsibilities
+**Size:** Functions are compact and focused
+- `updateNavBar()`: 25 lines
+- `toggleSidebar()`: 17 lines
+- `insertScript()`: 10 lines
+- Most helper functions under 30 lines
 
 **Parameters:**
-- Functions typically receive 0-3 parameters
-- Getter functions return derived state: `export function getDeviceState()` returns copy of internal state
-- Event handlers receive standard event objects: `function toggleTOC()`, `function toggleCourseVisibility(elem)`
+- Minimal parameters (0-2 typically)
+- Uses object destructuring for options: `{ controlsSelector }` in Filterizr initialization
+- Uses dataset attributes for passing data: `container.getAttribute('data-section')`, `btn.dataset.scheme`
 
 **Return Values:**
-- Getter functions return objects or primitives: `{ ...deviceState }`
-- Boolean returns for state checks
-- Early returns (no explicit null returns; implicit undefined)
+- Explicit return statements
+- Functions performing DOM mutations often return nothing (void)
+- State getter functions return object copies for immutability: `return { ...deviceState }`
+- Arrow functions used for callbacks: `const button = document.createElement('button')`
+
+**Arrow Function Usage:**
+- Event listeners: `.addEventListener('click', (e) => { ... })`
+- Callbacks and array operations: `.forEach((el) => el.addEventListener(...))`
+- State setters and getters: `const setScheme = (newScheme) => { ... }`
 
 ## Module Design
 
 **Exports:**
-- Named exports for utilities: `export const insertScript`, `export function getDeviceState()`
+- Selective exports using `export const` and `export function`
 - Re-exports via barrel files: `export * from './device'`
-- Event listener modules export nothing; side effects on import
+- No default exports observed
 
 **Barrel Files:**
-- Used to organize related functionality: `core/index.js`, `sections/index.js`, `features/index.js`
-- Barrel imports trigger module initialization: `import './core'` loads all core functionality
-- Conditional module loading via feature flags: `if (process.env.FEATURE_X === '1') { import('./module') }`
+- `core/index.js` aggregates: `export * from './device'` and `export * from './insertScript'`
+- `sections/index.js` imports all section modules
+- `features/index.js` imports all feature modules
+- Pattern reduces import complexity at application level
 
-## State Management
+**File Organization:**
+- Modules organized by feature area: `sections/`, `features/`, `core/`
+- Each section/feature in own directory with `index.js` entry point
+- Small utilities (`insertScript.js`) exported from core module
 
-**Pattern:** Module-scoped state with accessor functions
+## Code Patterns
 
-**Example from `device.js`:**
-```javascript
-let deviceState = {
-  isMobile: false,
-  isTablet: false,
-  isLaptop: false
-}
+**DOM Manipulation:**
+- Direct DOM manipulation via `document.getElementById()`, `document.querySelector()`, `document.querySelectorAll()`
+- Class toggling: `.classList.add()`, `.classList.remove()`, `.classList.toggle()`
+- Attribute manipulation: `.setAttribute()`, `.getAttribute()`, `.dataset` property access
+- Style manipulation: `.style.display = 'none'` for direct visibility control
 
-function detectDeviceState () {
-  // ... update deviceState
-}
+**Event Binding:**
+- `DOMContentLoaded` listener to ensure DOM ready before manipulation
+- Direct event listener binding: `.addEventListener('click', handler)`
+- Implicit event delegation for dynamically created elements
+- Target detection via `e.target.tagName` and `e.target.classList`
 
-export function getDeviceState () {
-  return { ...deviceState }  // Return copy to prevent external mutation
-}
-```
+**State Management:**
+- LocalStorage for persistence: `localStorage.getItem()`, `localStorage.setItem()`
+- Module-level variables for state: `let deviceState = { ... }`
+- Immutable state copies: `return { ...deviceState }` prevents external mutation
 
-**Key Convention:** State is private to module, accessed only through getter functions that return copies
-
-## DOM Manipulation
-
-**Patterns:**
-- Direct DOM manipulation via standard Web APIs: `document.getElementById()`, `document.querySelector()`
-- Class manipulation for state: `element.classList.add()`, `element.classList.remove()`, `element.classList.toggle()`
-- Data attributes for configuration: `element.getAttribute('data-section')`
-- Event delegation with `addEventListener()`
-
-**Selector Types:**
-- ID selectors: `document.getElementById('sidebar-section')`
-- Class selectors with `querySelectorAll()`: `document.querySelectorAll('pre > code')`
-- Tag selectors: `element.getElementsByTagName('a')`
-- Class list methods for dynamic behavior
-
-## Null/Undefined Checks
-
-**Convention:** Using loose equality (`==`) specifically for null checks:
-```javascript
-if (element == null)  // Checks both null and undefined
-if (element != null)  // Not null or undefined
-```
-
-**Optional chaining:** Modern optional chaining used where available: `topNavbar?.classList.remove()`
-
-## Async Patterns
-
-**Pattern:** Promises used with `addEventListener('load', async () => {...})`
-- Window load event waits for DOM and resources
-- Dynamic imports with conditional feature flags
+**Configuration:**
+- Hugo parameters injected via `@params`: `import * as params from '@params'`
+- Theme configuration accessed from params: `params.theme.dark`, `params.theme.light`
+- Constants derived from params with defaults: `const THEME_DARK = typeof themeOptions.dark === 'undefined' ? true : themeOptions.dark`
 
 ---
 
-*Convention analysis: 2026-02-16*
+*Convention analysis: 2026-02-22*

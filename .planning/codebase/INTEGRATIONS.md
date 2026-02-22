@@ -1,141 +1,146 @@
 # External Integrations
 
-**Analysis Date:** 2026-02-16
+**Analysis Date:** 2026-02-22
 
 ## APIs & External Services
 
-**Analytics (Conditionally Enabled):**
-- Google Analytics - Website traffic and user behavior tracking
-  - Configuration ID: `G-H4LBG7NDFZ`
-  - Status: Currently disabled (analytics.enable: false in hugo.yaml)
-  - Implementation: `themes/toha/layouts/partials/google_analytics.html`
-  - Trigger: Loads in production (hugo.IsProduction) when enabled
+**Analytics:**
+- Google Analytics - Site traffic and user behavior tracking
+  - Configuration: `hugo.yaml` (lines 172-173)
+  - Tracking ID: `G-H4LBG7NDFZ` (stored in config)
+  - Status: Disabled (`analytics.enable: false`)
+  - Available alternatives configured but disabled: Cloudflare, CounterDev, GoatCounter, Matomo, Umami, Statcounter, PostHog
 
-**Alternative Analytics Providers (Configured but Disabled):**
-- Counter.dev - Analytics tracking service
-- GoatCounter - Privacy-focused analytics
-- Cloudflare Web Analytics - CDN-integrated analytics
-- Matomo/Piwik - Self-hosted analytics alternative
-  - Client: `themes/toha/assets/scripts/features/analytics/matomo.js`
-- Umami - Privacy-focused analytics
-- PostHog - Product analytics platform
-  - Client: `themes/toha/assets/scripts/features/analytics/posthog.js`
-- Statcounter - Analytics and heatmap tracking
-  - Client: `themes/toha/assets/scripts/features/analytics/statcounter.js`
+**Comments:**
+- Disqus - Comment system
+  - Configuration: `hugo.yaml` (lines 134-135)
+  - Status: Disabled (`comment.enable: false`)
+  - Alternative comment systems available in config but disabled: Valine, Utterances, Giscus, Commento
 
-**Support/Donation Services:**
-- Ko-fi - Tipping/support platform
-  - Status: Disabled (support.enable: false in hugo.yaml)
-  - Configuration available in `hugo.yaml` params.features.support
+**Support/Donations:**
+- Ko-fi - Donation/tip integration
+  - Configuration: `hugo.yaml` (lines 206-210)
+  - Status: Disabled (`support.enable: false`)
+  - Alternative: Buy Me a Coffee (commented out in config)
+
+**Newsletter:**
+- Mailchimp - Newsletter subscription
+  - Configuration: `hugo.yaml` (lines 331-335)
+  - Status: Disabled (`newsletter.enable: false`)
 
 ## Data Storage
 
-**Content Storage:**
-- Markdown files in `content/` directory (posts, notes, portfolio items)
-- YAML data files in `data/en/` for structured content:
-  - `author.yaml` - Author information
-  - `site.yaml` - Site-wide settings
-  - `sections/*.yaml` - Portfolio sections (experiences, education, projects, etc.)
-
-**Static File Storage:**
-- Local filesystem at `static/` and `assets/`
-- Images in `assets/images/` for optimized processing
-- Generated output in `public/` (committed to git)
+**Databases:**
+- None - Static site with no dynamic backend
+- Data storage: YAML files in `data/` directory
+  - `data/en/site.yaml` - Site metadata
+  - `data/en/author.yaml` - Author information
+  - `data/en/sections/*.yaml` - Portfolio content sections
 
 **File Storage:**
-- No external cloud storage - all files committed to Git repository
-- GitHub as primary repository: github.com/fekihatem11/HatemFeki.github.io
+- Local filesystem only
+  - Static assets: `static/` directory
+  - Asset images: `assets/images/` directory
+  - Public output: `public/` directory (generated)
 
 **Caching:**
-- None - Static site generated fresh on each build
-- Browser caching via HTTP headers configured through Hugo
+- None configured - Static site generation handles caching through CDN
 
 ## Authentication & Identity
 
 **Auth Provider:**
-- None - Static portfolio site with no backend authentication
-- No user accounts or login system
-
-**Social Links:**
-- Managed via `data/en/author.yaml` (social media profiles)
-- No OAuth or third-party identity provider integration
+- None - Static site, no user authentication
+- GitHub integration for deployment via GitHub Actions (read-only access to repository)
 
 ## Monitoring & Observability
 
 **Error Tracking:**
-- None configured - Static site with no error tracking service
+- None configured - Static site with no backend error tracking
+- Build logs available via GitHub Actions (`/.github/workflows/hugo.yaml`)
 
 **Logs:**
-- GitHub Actions build logs available in `.github/workflows/` output
-- No application-level logging
-- No error reporting service
+- GitHub Actions logs - Build and deployment pipeline logs
+  - Workflow file: `/.github/workflows/hugo.yaml`
+  - Build steps include Hugo CLI installation, dependency installation, site build, and artifact upload
 
 ## CI/CD & Deployment
 
 **Hosting:**
-- GitHub Pages - Automatic deployment from main branch
-- Custom domain: hatemfeki.com
-- HTTPS enabled via GitHub Pages/custom domain
+- GitHub Pages - Primary hosting platform
+  - Domain: hatemfeki.com (custom domain via DNS)
+  - Default branch: main
+  - Auto-deployment on push
 
 **CI Pipeline:**
-- GitHub Actions workflow: `.github/workflows/hugo.yaml`
-- Triggers: Push to main branch or manual workflow_dispatch
-- Build steps:
-  1. Install Hugo 0.146.0 (Extended)
-  2. Checkout with recursive submodules
-  3. Install Node.js dependencies via npm ci
-  4. Build with Hugo (--gc --minify flags)
-  5. Upload artifact to GitHub Pages
-  6. Deploy to GitHub Pages
+- GitHub Actions - Automated build and deployment
+  - Workflow file: `/.github/workflows/hugo.yaml`
+  - Trigger: Push to main branch or manual dispatch
+  - Build steps:
+    1. Install Hugo CLI (v0.146.0)
+    2. Checkout repository with submodules (includes Toha theme)
+    3. Setup GitHub Pages environment
+    4. Install Node.js dependencies via npm
+    5. Build site with Hugo (with garbage collection and minification)
+    6. Upload artifact to GitHub Pages
+    7. Deploy to GitHub Pages
 
-**Deployment Target:**
-- Static HTML/CSS/JS to GitHub Pages
-- Served over HTTPS at hatemfeki.com
+**Build Environment:**
+- OS: Ubuntu latest
+- Hugo: Extended version 0.146.0
+- Node.js: Latest available in GitHub Actions environment
+- Deploy token: `GITHUB_TOKEN` (GitHub Actions automatic token)
 
 ## Environment Configuration
 
 **Required env vars:**
-None explicit in application code. GitHub Actions sets:
-- `HUGO_ENVIRONMENT: production`
-- `HUGO_ENV: production`
-- `HUGO_VERSION: 0.146.0`
+- `HUGO_ENVIRONMENT: production` - Hugo build environment
+- `HUGO_ENV: production` - Legacy Hugo environment variable
+- GitHub Actions built-in: `runner.temp`, `github.workspace`
 
 **Secrets location:**
-- None in codebase
-- Handled by GitHub (GitHub Pages deployment token)
+- Google Analytics ID: Hardcoded in `hugo.yaml` (not sensitive)
+- Ko-fi user: Hardcoded in `hugo.yaml` (not sensitive, public information)
+- Disqus shortName: Hardcoded in `hugo.yaml` (not sensitive)
+- No sensitive credentials detected in codebase
+- GitHub token: Automatically managed by GitHub Actions
 
 ## Webhooks & Callbacks
 
 **Incoming:**
-- None configured
+- GitHub webhook - Automatic trigger on push to main branch
+  - Configured via GitHub Pages settings
+  - No custom webhook endpoints
 
 **Outgoing:**
-- None configured
-- Analytics services (if enabled) would send outbound tracking requests
+- None detected - Static site has no outgoing webhooks or callbacks
 
-## Asset CDNs
+## External Theme & Module Dependencies
 
-**Third-party Resources:**
-- Font Awesome assets bundled locally (not CDN-served)
-- Bootstrap bundled via npm, assets bundled in Hugo
-- KaTeX fonts mounted from `node_modules/katex/dist/fonts`
-- Feather Icons bundled from npm
-- Flag Icons bundled from npm
-- Mulish font bundled from @fontsource
+**Hugo Module:**
+- `github.com/hugo-toha/toha/v4` - Portfolio theme
+  - Source: GitHub (official Toha theme repository)
+  - Local override: `./themes/toha` (development mode)
+  - Submodule: `themes/toha` (referenced in `.gitmodules`)
+  - Provides:
+    - Responsive HTML templates
+    - Navigation and footer components
+    - Portfolio section rendering
+    - Blog/notes feature templates
+    - Dark/light theme support
+    - Multi-language support structure
 
-**No external CDN dependencies** - All JavaScript and CSS assets are built locally and served from `public/` directory.
+## Font & Icon Services
 
-## External Links & References
+**Google Fonts:**
+- Source: `https://fonts.googleapis.com`
+- Font: Cormorant Garamond (italic and regular weights)
+- Import: CSS `@import` in `assets/styles/override.scss` (line 5)
 
-**Theme Source:**
-- Hugo Toha theme: github.com/hugo-toha/toha/v4
-- Theme repository provides components, layouts, and styling foundation
-
-**GitHub Integration:**
-- Repository: github.com/fekihatem11/HatemFeki.github.io
-- gitRepo parameter in `hugo.yaml` points to original example site (not actively used)
-- Submodules for theme dependency management
+**Local Font Files:**
+- Mulish (via @fontsource/mulish 4.5.13)
+- KaTeX mathematical fonts (via katex 0.16.11)
+- Mounted to `static/fonts/` during build
 
 ---
 
-*Integration audit: 2026-02-16*
+*Integration audit: 2026-02-22*

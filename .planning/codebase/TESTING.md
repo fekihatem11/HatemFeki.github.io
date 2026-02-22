@@ -1,242 +1,273 @@
 # Testing Patterns
 
-**Analysis Date:** 2026-02-16
+**Analysis Date:** 2026-02-22
 
 ## Test Framework
 
-**Status:** No test framework detected
+**Status:** Not detected
 
-**What's configured:**
-- No Jest, Vitest, Mocha, or other test framework found
-- No test configuration files (`jest.config.js`, `vitest.config.ts`, etc.)
-- No test scripts in `package.json`
-- No `.test.js` or `.spec.js` files in the codebase
+This is a Hugo static site generator project with vanilla JavaScript for interactivity. No testing framework is configured:
 
-**Development dependencies:**
-- No testing libraries in `package.json` dependencies
-- Project uses Prettier for formatting and ESLint for linting, but no testing infrastructure
+- Jest: not installed
+- Vitest: not installed
+- Mocha: not installed
+- Chai, Jasmine, or other assertion libraries: not installed
+- Test configuration files (jest.config.js, vitest.config.ts, mocha.opts): not found
+- Test scripts in package.json: none
 
-## Testing Gap Analysis
+**Build Configuration:**
+- Hugo handles site generation
+- ESLint and Prettier for code quality only
+- No unit test runner installed
 
-**Current state:**
-- This is a Hugo portfolio theme (`themes/toha/`) with JavaScript client-side code
-- 38 JavaScript files across modules (`core/`, `sections/`, `features/`, `pages/`)
-- Zero test coverage
+## Test File Organization
 
-**High-risk, untested modules:**
+**Current State:** No test files exist
 
-**DOM State Management (`core/device.js`):**
-- What's tested: Nothing
-- Risk: Device state detection (mobile/tablet/laptop) broken unnoticed
-- Files: `themes/toha/assets/scripts/core/device.js` (36 lines)
-- Impact: Mobile responsiveness depends on this; breakage affects entire site
+No `.test.js`, `.spec.js`, `.test.ts`, or `.spec.ts` files found anywhere in the project (excluding `node_modules`).
 
-**Theme Switching (`features/theme/index.js`, `features/darkmode/index.js`):**
-- What's tested: Nothing
-- Risk: localStorage handling, CSS attribute updates, icon switching
-- Files:
-  - `themes/toha/assets/scripts/features/theme/index.js` (88 lines)
-  - `themes/toha/assets/scripts/features/darkmode/index.js` (70 lines)
-- Impact: Dark mode broken unnoticed; localStorage issues silently fail
+**Observation:** The codebase is primarily frontend interactivity scripts for a static site. Testing would require:
+1. A test runner (Jest, Vitest, etc.)
+2. DOM testing utilities (jsdom, @testing-library/dom)
+3. Test file structure convention (co-located with source or in separate `/tests` directory)
 
-**Gallery Layout (`sections/achievements.js`):**
-- What's tested: Nothing
-- Risk: Responsive layout calculations (232 lines of layout logic)
-- Files: `themes/toha/assets/scripts/sections/achievements.js`
-- Impact: Achievement gallery may render incorrectly without catching errors
+## Testing Strategy (Not Implemented)
 
-**Navigation (`sections/sidebar.js`, `sections/navbar.js`):**
-- What's tested: Nothing
-- Risk: Toggle state management, DOM manipulation
-- Files:
-  - `themes/toha/assets/scripts/sections/sidebar.js` (38 lines)
-  - `themes/toha/assets/scripts/sections/navbar.js` (63 lines)
-- Impact: Navigation broken unnoticed on responsive layouts
+**If testing were to be added:**
 
-**DOM Utilities (`core/insertScript.js`):**
-- What's tested: Nothing
-- Risk: Script injection, async/defer behavior
-- Files: `themes/toha/assets/scripts/core/insertScript.js` (14 lines)
-- Impact: Feature flags may not load scripts correctly
-
-## Recommended Testing Strategy
-
-**Phase 1: Unit Tests**
-- Test framework: Vitest (lightweight, ESM-first, suitable for ES modules)
-- Setup in `themes/toha/`
-
-**Test structure:**
+**Test Location Pattern (recommended):**
 ```
-themes/toha/
-├── assets/scripts/
+assets/scripts/
+├── core/
+│   ├── device.js
+│   ├── device.test.js          # Co-located tests
+│   ├── insertScript.js
+│   └── insertScript.test.js
+├── sections/
+│   ├── navbar.js
+│   ├── navbar.test.js
+│   └── ...
+└── features/
+    ├── darkmode/
+    │   ├── index.js
+    │   └── index.test.js
+    └── ...
+```
+
+**Alternative (separate directory):**
+```
+tests/
+├── unit/
 │   ├── core/
-│   │   ├── device.js
-│   │   ├── device.test.js        (NEW)
-│   │   └── insertScript.test.js  (NEW)
-│   ├── features/
-│   │   └── theme/
-│   │       ├── index.js
-│   │       └── index.test.js     (NEW)
+│   │   ├── device.test.js
+│   │   └── insertScript.test.js
+│   ├── sections/
+│   │   └── navbar.test.js
+│   └── features/
+│       └── darkmode.test.js
+├── integration/
+└── fixtures/
 ```
 
-**Mock strategy for browser APIs:**
-- Mock `localStorage`
-- Mock `window.matchMedia()` for theme preference detection
-- Mock `document.querySelector()`, `getElementById()` with JSDOM
-- Mock `window.addEventListener()`
+## Module Testing Patterns (Hypothetical)
 
-**Integration tests:**
-- Verify DOM manipulation with mocked DOM
-- Test state propagation through modules
-- Test event listener binding and triggering
+Based on code structure, testable modules:
 
-## What to Test First (Priority Order)
-
-**1. Device State Detection (`core/device.js`):**
+**Module: `core/device.js`**
 ```javascript
-// Should test viewport size detection
-// Should update state on window resize
-// Should return copy of state (immutability)
-```
+// Hypothetical test structure
+import { getDeviceState } from './device'
 
-**2. Theme Persistence (`features/theme/index.js`):**
-```javascript
-// Should load saved theme from localStorage
-// Should fall back to system preference
-// Should save theme selection
-// Should update HTML data-theme attribute
-// Should apply correct icon
-```
-
-**3. DOM State Toggles (`sections/sidebar.js`, `sections/navbar.js`):**
-```javascript
-// Should toggle class on element
-// Should manage related elements correctly
-// Should handle null/missing elements gracefully
-```
-
-**4. Module Exports (`core/index.js`):**
-```javascript
-// Should export device utilities
-// Should export script insertion utilities
-```
-
-## Current Code Quality Observations
-
-**Strengths:**
-- Modular organization by feature/section
-- Clear separation of concerns
-- Barrel files organize exports
-- Comments explain non-obvious behavior
-- Early returns prevent nesting
-
-**Test-blocking patterns:**
-- Heavy DOM coupling - requires mocked DOM for testing
-- localStorage direct access - requires mocking
-- window object side effects - requires mocking
-- No dependency injection - services tightly coupled to globals
-- No abstraction layer for DOM operations
-
-**Refactoring needed for testability:**
-- Extract pure functions from DOM-coupled code
-- Create abstraction for localStorage access
-- Create abstraction for window/document global access
-- Separate business logic from DOM manipulation
-
-## Setting Up Tests
-
-**Recommended configuration:**
-
-**`themes/toha/vitest.config.js`:**
-```javascript
-import { defineConfig } from 'vitest/config'
-
-export default defineConfig({
-  test: {
-    globals: true,
-    environment: 'jsdom',
-    include: ['**/*.test.js'],
-  },
+describe('device state detection', () => {
+  // Test device state based on window.innerWidth
+  // Mock window.innerWidth and trigger resize event
+  // Verify getDeviceState() returns correct values
 })
 ```
 
-**`themes/toha/package.json` updates:**
-```json
-{
-  "devDependencies": {
-    "vitest": "^1.0.0",
-    "jsdom": "^23.0.0",
-  },
-  "scripts": {
-    "test": "vitest",
-    "test:watch": "vitest --watch",
-    "test:coverage": "vitest --coverage"
-  }
+**Testable Aspects:**
+- Window width breakpoint detection (425px, 768px)
+- Device state object structure and immutability
+- Resize event listener registration
+
+**Module: `core/insertScript.js`**
+```javascript
+// Hypothetical test structure
+import { insertScript } from './insertScript'
+
+describe('insertScript', () => {
+  // Test script element creation
+  // Test script attributes (id, src, defer, async)
+  // Test insertion into DOM
+  // Test idempotency (not re-inserting if exists)
+  // Test onload callback execution
+})
+```
+
+**Testable Aspects:**
+- DOM element creation
+- Attribute assignment
+- Document structure manipulation
+- Callback execution
+
+**Module: `sections/navbar.js`**
+```javascript
+// Hypothetical test structure
+describe('navbar scroll behavior', () => {
+  // Mock DOM elements (#top-navbar, #navbar-toggler, etc.)
+  // Simulate scroll events at different scroll positions
+  // Verify class additions/removals
+  // Verify logo switching
+})
+```
+
+**Testable Aspects:**
+- Class toggling based on scroll position
+- DOM element selection
+- Conditional class manipulation
+
+## Mocking Patterns (Not Currently Used)
+
+**If testing were implemented, mocking strategy would be:**
+
+**DOM Mocking:**
+```javascript
+// Mock window and document objects
+// Use jsdom or @testing-library/dom
+const { JSDOM } = require('jsdom')
+const dom = new JSDOM('<!DOCTYPE html><html><body></body></html>')
+global.window = dom.window
+global.document = dom.window.document
+```
+
+**LocalStorage Mocking:**
+```javascript
+// Mock localStorage for theme persistence tests
+const localStorageMock = {
+  getItem: jest.fn(),
+  setItem: jest.fn(),
+  clear: jest.fn()
 }
+global.localStorage = localStorageMock
 ```
 
-**Fixture example:**
+**Window.matchMedia Mocking:**
 ```javascript
-// features/theme/index.test.js
-import { beforeEach, afterEach, describe, it, expect, vi } from 'vitest'
-
-describe('Theme Module', () => {
-  beforeEach(() => {
-    // Clear localStorage before each test
-    localStorage.clear()
-    vi.clearAllMocks()
-  })
-
-  afterEach(() => {
-    document.documentElement.removeAttribute('data-theme')
-  })
-
-  it('should load saved theme from localStorage', () => {
-    localStorage.setItem('theme-scheme', 'dark')
-    // Import and run module initialization
-    // Assert theme applied
-  })
+// Mock media queries for color scheme detection
+Object.defineProperty(window, 'matchMedia', {
+  writable: true,
+  value: jest.fn().mockImplementation(query => ({
+    matches: false,
+    media: query,
+    onchange: null,
+    addListener: jest.fn(),
+    removeListener: jest.fn(),
+    addEventListener: jest.fn(),
+    removeEventListener: jest.fn(),
+    dispatchEvent: jest.fn(),
+  }))
 })
 ```
 
-## Code Coverage Gaps by Module
+**Event Mocking:**
+```javascript
+// Simulate DOMContentLoaded
+const event = new Event('DOMContentLoaded')
+document.dispatchEvent(event)
 
-| Module | Lines | Complexity | Test Status | Priority |
-|--------|-------|-----------|------------|----------|
-| `core/device.js` | 36 | Medium | Untested | High |
-| `core/insertScript.js` | 14 | Low | Untested | Medium |
-| `features/theme/index.js` | 88 | High | Untested | High |
-| `features/darkmode/index.js` | 70 | High | Untested | High |
-| `sections/achievements.js` | 232 | Very High | Untested | High |
-| `sections/navbar.js` | 63 | Medium | Untested | High |
-| `sections/sidebar.js` | 38 | Low | Untested | Medium |
-| `sections/education.js` | 30 | Low | Untested | Low |
-| `features/copyCode/copyCode.js` | 22 | Low | Untested | Low |
+// Simulate scroll events
+window.scrollY = 50
+window.dispatchEvent(new Event('scroll'))
 
-**Total lines of untested code: ~593 lines**
+// Simulate click events
+element.dispatchEvent(new MouseEvent('click', { bubbles: true }))
+```
 
-## Known Testing Risks
+## What Would Be Tested
 
-**Risk 1: localStorage not cleared between browser sessions**
-- Files: `features/theme/index.js`, `features/darkmode/index.js`
-- Impact: Theme preference persists incorrectly, confusing users
-- Test needed: Verify localStorage cleared, system preference as fallback
+**Unit Tests (per module):**
 
-**Risk 2: Device state calculation on viewport size**
-- Files: `core/device.js`
-- Impact: Breakpoints may be off (425px, 768px are hardcoded)
-- Test needed: Mock window.innerWidth at boundary values
+`core/device.js`:
+- Breakpoint detection for mobile (≤425px), tablet (≤768px), laptop (>768px)
+- getDeviceState() immutability (returns copy, not reference)
+- Resize event listener adds/removes properly
 
-**Risk 3: DOM manipulation with null element references**
-- Files: `sections/achievements.js`, `sections/navbar.js`, `sections/sidebar.js`
-- Impact: Silent failures when DOM structure changes
-- Test needed: Test with missing elements, verify graceful handling
+`core/insertScript.js`:
+- Script element creation with correct attributes
+- Idempotency (calling twice doesn't insert twice)
+- Callback execution on script load
+- Defer and async flags set correctly
 
-**Risk 4: Event listener binding on DOMContentLoaded**
-- Files: Multiple section files
-- Impact: Event listeners may not bind if DOM structure changes
-- Test needed: Mock and verify addEventListener calls
+`sections/navbar.js`:
+- updateNavBar() applies correct classes at different scroll positions
+- Logo switching logic
+- Mobile nav collapse on link click
+- Class removal of unrelated elements
+
+`sections/sidebar.js`:
+- toggleSidebar() expands/collapses correctly
+- Hero area hiding on mobile
+- Content section toggle
+- Interaction with TOC section
+
+`sections/skills.js` and `sections/projects.js`:
+- Filterizr initialization with correct selector
+- Filter button rendering
+- Card filtering functionality
+
+`features/darkmode/index.js` and `features/theme/index.js`:
+- Dark/light mode toggle
+- LocalStorage persistence
+- System preference detection via matchMedia
+- Icon switching
+- Logo visibility toggling
+- Preference loading and saving
+
+**Integration Tests:**
+- Scroll triggering navbar appearance
+- Theme persistence across page reload
+- Multiple filtering systems coexisting
+- Sidebar toggle with TOC interaction
+
+## Coverage Gaps (Not Measurable)
+
+Since no testing framework is installed, coverage cannot be measured. However, untested areas would include:
+
+- Filterizr library integration (filter button click handling)
+- Bootstrap/Popper.js DOM manipulation
+- FontAwesome icon rendering
+- Hugo-generated HTML structure assumptions
+
+## Test Commands (Not Applicable)
+
+No test scripts configured in `package.json`. If Jest were added:
+
+```bash
+npm test                    # Run all tests
+npm run test:watch         # Watch mode
+npm run test:coverage      # Generate coverage report
+```
+
+## Current Quality Assurance
+
+**What replaces testing:**
+
+1. **ESLint static analysis:** `/Users/artem/Desktop/Personal-projects/my-portfolio/themes/toha/.eslintrc.yml`
+   - Validates code style and prevents common errors
+   - Enforces no jQuery usage
+
+2. **Prettier code formatting:** `/Users/artem/Desktop/Personal-projects/my-portfolio/themes/toha/.prettierrc.yml`
+   - Enforces consistent formatting across modules
+
+3. **Manual testing:** Git commit messages indicate careful feature validation
+   - Commits describe specific UI changes
+   - "feat(quick-4): remove theme switcher..." shows deliberate testing before commit
+
+4. **Browser DevTools:** Direct manual testing in browser
+   - DOM inspection for structure
+   - Network tab for resource loading
+   - Console for runtime errors
 
 ---
 
-*Testing analysis: 2026-02-16*
+*Testing analysis: 2026-02-22*
