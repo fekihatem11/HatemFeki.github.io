@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="500" height="500" viewBox="0 0 250 250">
+  <style>
+    .arrow { fill: #DE022B; }
+    @media (prefers-color-scheme: dark) {
+      .arrow { fill: #ffffff; }
+    }
+  </style>
+  <!-- Red square -->
+  <path d="m79.49 43v163.1h163.5v-163.1h-163.5z" fill="#DE022B"/>
+  <!-- Arrow — red in light mode, white in dark mode -->
+  <path class="arrow" d="m62.98 117.1-56.87-29.34v18.94l38.15 17.7-38.15 17.7v19.46l56.87-29.59v-14.87z"/>
+  <!-- LLM letters — white on red square, always visible -->
+  <path d="m91.21 93.04v62.67h35.2v-11.09h-22.02v-51.58h-13.18z" fill="#ffffff"/>
+  <path d="m132.1 93.04v62.67h36.42v-11.09h-23.47v-51.58h-12.95z" fill="#ffffff"/>
+  <path d="m174 93.04v62.67h11.95v-48.6l11.06 48.6h10.73l10.87-49.3v49.3h12.95v-62.67h-20.28l-8.86 43.34-9.5-43.34h-18.92z" fill="#ffffff"/>
+</svg>

@@ -1,0 +1,87 @@
+{{ $sectionID := replace (lower .section.name) " " "-"  }}
+{{ if .section.id }}
+  {{ $sectionID = .section.id }}
+{{ end }}
+
+<div class="container-fluid anchor pb-5 projects-section" id="{{ $sectionID }}">
+  {{ if not (.section.hideTitle) }}
+  <h1 class="text-center">{{ .section.name }}</h1>
+  {{ end }}
+
+  <div class="container">
+    <div class="project-filters" id="project-filter-buttons-{{ $sectionID }}">
+      {{ range .buttons }}
+      <button type="button" class="project-filter-btn project-filtr-control" data-filter="{{ .filter }}" data-section="{{ $sectionID }}">
+        {{ .name }}
+      </button>
+      {{ end }}
+    </div>
+  </div>
+
+  <div class="container filtr-projects" data-section="{{ $sectionID }}">
+    <div class="row" id="project-card-holder-{{ $sectionID }}">
+      {{ range .projects }}
+      <div class="col-sm-12 col-md-6 col-lg-4 p-2 filtr-item"
+        data-category='all, {{ delimit .tags "," }}'>
+
+        <a href="{{ if .repo }}{{ .repo }}{{ else if .url }}{{ .url }}{{ else }}javascript:void(0){{ end }}"
+          {{ if or .repo .url }}target="_blank" rel="noopener"{{ end }}
+          class="project-card">
+
+          <div class="project-card-thumb">
+            {{ if .image }}
+              {{ $img := resources.Get .image }}
+              {{ if $img }}
+                {{ if ne $img.MediaType.SubType "svg" }}
+                  {{ $img = $img.Fit "600x400" }}
+                {{ end }}
+                <img src="{{ $img.RelPermalink }}" alt="{{ .name }}" />
+              {{ end }}
+            {{ else if .logo }}
+              {{ if eq (len (findRE ".*/.*" .logo)) 0 }}
+                <div class="project-card-icon"><i class="{{ .logo }} h1"></i></div>
+              {{ else }}
+                {{ $logo := resources.Get .logo }}
+                {{ if $logo }}
+                  {{ if ne $logo.MediaType.SubType "svg" }}
+                    {{ $logo = $logo.Fit "80x80" }}
+                  {{ end }}
+                  <div class="project-card-icon">
+                    <img src="{{ $logo.RelPermalink }}" alt="{{ .name }}" />
+                  </div>
+                {{ end }}
+              {{ end }}
+            {{ else }}
+              <div class="project-card-icon">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path>
+                </svg>
+              </div>
+            {{ end }}
+          </div>
+
+          <div class="project-card-info">
+            <div class="project-card-info-top">
+              <div>
+                <h3 class="project-card-title">{{ .name }}</h3>
+                {{ if .summary }}
+                <p class="project-card-desc">{{ .summary | markdownify | plainify | truncate 100 }}</p>
+                {{ end }}
+              </div>
+              {{ if .url }}
+              <span class="project-live-btn" onclick="event.preventDefault(); event.stopPropagation(); window.open('{{ .url }}', '_blank');">
+                Live
+                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M7 17L17 7"></path><path d="M7 7h10v10"></path>
+                </svg>
+              </span>
+              {{ end }}
+            </div>
+          </div>
+
+        </a>
+      </div>
+      {{ end }}
+    </div>
+  </div>
+</div>

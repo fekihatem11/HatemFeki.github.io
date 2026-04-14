@@ -1,0 +1,130 @@
+{{ $sectionID := replace (lower .section.name) " " "-"  }}
+{{ if .section.id }}
+  {{ $sectionID = .section.id }}
+{{ end }}
+
+<div class="container-fluid anchor skills-section" id="{{ $sectionID }}">
+  {{ if not (.section.hideTitle) }}
+  <h1 class="text-center">{{ .section.name }}</h1>
+  {{ end }}
+
+  <div class="skills-carousel-wrapper">
+    <button class="skills-arrow skills-arrow--left" aria-label="Scroll left">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="15 18 9 12 15 6"></polyline>
+      </svg>
+    </button>
+
+    <div class="skills-carousel-mask">
+      <div class="skills-carousel-track">
+        {{/* Render skills twice for seamless loop */}}
+        {{ range $i := seq 2 }}
+        {{ range $.skills }}
+        <div class="skills-carousel-item">
+          {{ if .logo }}
+            {{ $logoImage := resources.Get .logo }}
+            {{ if ne $logoImage.MediaType.SubType "svg" }}
+              {{ $logoImage = $logoImage.Fit "28x28" }}
+            {{ end }}
+            <img src="{{ $logoImage.RelPermalink }}" alt="{{ .name }}" class="skills-carousel-icon" />
+          {{ end }}
+          <span class="skills-carousel-name">{{ .name }}</span>
+        </div>
+        {{ end }}
+        {{ end }}
+      </div>
+    </div>
+
+    <button class="skills-arrow skills-arrow--right" aria-label="Scroll right">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="9 18 15 12 9 6"></polyline>
+      </svg>
+    </button>
+  </div>
+
+  {{ if or .languages .softSkills }}
+  <div class="skills-extra">
+    {{ if .languages }}
+    <div class="skills-extra-col">
+      <h3 class="skills-extra-title">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10"></circle>
+          <line x1="2" y1="12" x2="22" y2="12"></line>
+          <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+        </svg>
+        Languages
+      </h3>
+      <ul class="skills-lang-list">
+        {{ range .languages }}
+        <li class="skills-lang-item">
+          <span class="skills-lang-name">{{ .name }}</span>
+          <span class="skills-lang-level">{{ .level }}</span>
+        </li>
+        {{ end }}
+      </ul>
+    </div>
+    {{ end }}
+
+    {{ if .softSkills }}
+    <div class="skills-extra-col">
+      <h3 class="skills-extra-title">Soft Skills</h3>
+      <div class="skills-pills">
+        {{ range .softSkills }}
+        <span class="skills-pill">{{ . }}</span>
+        {{ end }}
+      </div>
+    </div>
+    {{ end }}
+  </div>
+  {{ end }}
+</div>
+
+<script>
+(function() {
+  var track = document.querySelector('.skills-carousel-track');
+  var leftBtn = document.querySelector('.skills-arrow--left');
+  var rightBtn = document.querySelector('.skills-arrow--right');
+  if (!track) return;
+
+  var speed = 0.4; // px per frame
+  var pos = 0;
+  var paused = false;
+  var halfWidth = track.scrollWidth / 2;
+
+  function animate() {
+    if (!paused) {
+      pos -= speed;
+      if (Math.abs(pos) >= halfWidth) {
+        pos += halfWidth;
+      }
+      track.style.transform = 'translateX(' + pos + 'px)';
+    }
+    requestAnimationFrame(animate);
+  }
+
+  // Pause on hover
+  track.addEventListener('mouseenter', function() { paused = true; });
+  track.addEventListener('mouseleave', function() { paused = false; });
+
+  // Manual scroll with arrows
+  var scrollAmount = 220;
+
+  leftBtn.addEventListener('click', function() {
+    pos += scrollAmount;
+    if (pos > 0) pos -= halfWidth;
+    track.style.transition = 'transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
+    track.style.transform = 'translateX(' + pos + 'px)';
+    setTimeout(function() { track.style.transition = 'none'; }, 400);
+  });
+
+  rightBtn.addEventListener('click', function() {
+    pos -= scrollAmount;
+    if (Math.abs(pos) >= halfWidth) pos += halfWidth;
+    track.style.transition = 'transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
+    track.style.transform = 'translateX(' + pos + 'px)';
+    setTimeout(function() { track.style.transition = 'none'; }, 400);
+  });
+
+  requestAnimationFrame(animate);
+})();
+</script>

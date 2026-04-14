@@ -1,0 +1,88 @@
+{{ $sectionID := replace (lower .section.name) " " "-"  }}
+{{ if .section.id }}
+  {{ $sectionID = .section.id }}
+{{ end }}
+
+{{ $author:= site.Data.author }}
+{{ if (index site.Data site.Language.Lang).author }}
+  {{ $author = (index site.Data site.Language.Lang).author }}
+{{ end }}
+
+<div class="container anchor p-lg-5 about-section" id="{{ $sectionID }}">
+  <h1 class="text-center">{{ .section.name }}</h1>
+
+  <div class="row justify-content-center">
+    <div class="col-lg-8 col-md-10 col-12">
+
+      <div class="about-body">
+        {{ .summary | markdownify }}
+      </div>
+
+      <div class="about-links">
+        <ul class="social-link d-flex justify-content-center">
+          {{ range .socialLinks }}
+          <li>
+            {{ if eq .name "Email" }}
+              <a href="mailto:{{ .url }}" title="{{ .name }}" target="_blank" rel="{{.rel | default "noopener"}}"><i class="{{ .icon }}"></i></a>
+            {{ else if eq .name (i18n "phone") }}
+              <a href="tel:{{ .url }}" title="{{ .name }}" target="_blank" rel="{{.rel | default "noopener"}}"><i class="{{ .icon }}"></i></a>
+            {{ else }}
+              <a href="{{ .url }}" title="{{ .name }}" target="_blank" rel="{{.rel | default "noopener"}}"><i class="{{ .icon }}"></i></a>
+            {{ end }}
+          </li>
+          {{ end }}
+        </ul>
+
+        {{ if or .resume .resourceLinks }}
+        <div class="about-actions">
+          {{ if .resume }}
+          <a href="{{ .resume | relURL }}" title="{{ i18n "resume"}}" target="#" class="btn-cursor-aware">
+            <span class="btn-fill"></span>
+            <span class="btn-text">{{ i18n "resume"}}</span>
+          </a>
+          {{ end }}
+          {{ range .resourceLinks }}
+          <a href="{{ .url | relURL }}" title="{{ .title }}" target="#" class="btn-cursor-aware">
+            <span class="btn-fill"></span>
+            <span class="btn-text">{{ .title }}</span>
+          </a>
+          {{ end }}
+        </div>
+        {{ end }}
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script>
+(function() {
+  document.querySelectorAll('.btn-cursor-aware').forEach(function(btn) {
+    var fill = btn.querySelector('.btn-fill');
+
+    btn.addEventListener('mouseenter', function(e) {
+      var rect = btn.getBoundingClientRect();
+      var x = e.clientX - rect.left;
+      var y = e.clientY - rect.top;
+      fill.style.transition = 'none';
+      fill.style.left = x + 'px';
+      fill.style.top = y + 'px';
+      fill.style.transform = 'translate(-50%, -50%) scale(0)';
+      // Force reflow
+      fill.offsetHeight;
+      fill.style.transition = 'transform 0.45s cubic-bezier(0.23, 1, 0.32, 1)';
+      fill.style.transform = 'translate(-50%, -50%) scale(1)';
+    });
+
+    btn.addEventListener('mouseleave', function(e) {
+      var rect = btn.getBoundingClientRect();
+      var x = e.clientX - rect.left;
+      var y = e.clientY - rect.top;
+      fill.style.left = x + 'px';
+      fill.style.top = y + 'px';
+      fill.style.transition = 'transform 0.35s cubic-bezier(0.23, 1, 0.32, 1)';
+      fill.style.transform = 'translate(-50%, -50%) scale(0)';
+    });
+  });
+})();
+</script>

@@ -192,15 +192,74 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-  const homeLink = document.querySelector('a[href*="#home"]');
+  var homeLink = document.querySelector('a[href*="#home"]');
   if (homeLink) {
     homeLink.addEventListener('click', function(e) {
       e.preventDefault();
-      const heroSection = document.getElementById('custom-hero');
+      var heroSection = document.getElementById('custom-hero');
       if (heroSection) {
         heroSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
       }
     });
   }
+
+  // Custom scroll spy — replaces Bootstrap's which breaks with sticky hero
+  var navLinks = document.querySelectorAll('.navbar-pill-container .nav-link');
+  var sections = [];
+
+  navLinks.forEach(function(link) {
+    var href = link.getAttribute('href');
+    if (!href) return;
+    var hash = href.indexOf('#') !== -1 ? href.substring(href.indexOf('#') + 1) : null;
+    if (!hash) return;
+    var el = document.getElementById(hash);
+    if (el) sections.push({ id: hash, el: el, link: link });
+  });
+
+  var ticking = false;
+
+  function updateActive() {
+    var scrollY = window.scrollY;
+    var viewH = window.innerHeight;
+    var trigger = scrollY + viewH * 0.35;
+    var activeId = null;
+
+    // If near top, highlight Home
+    if (scrollY < viewH * 0.5) {
+      activeId = 'home';
+    } else {
+      // Find the section whose top is closest above the trigger line
+      for (var i = sections.length - 1; i >= 0; i--) {
+        var rect = sections[i].el.getBoundingClientRect();
+        var sectionTop = rect.top + scrollY;
+        if (sectionTop <= trigger) {
+          activeId = sections[i].id;
+          break;
+        }
+      }
+    }
+
+    navLinks.forEach(function(link) {
+      var href = link.getAttribute('href') || '';
+      var hash = href.indexOf('#') !== -1 ? href.substring(href.indexOf('#') + 1) : '';
+      if (hash === activeId) {
+        link.classList.add('active');
+      } else {
+        link.classList.remove('active');
+      }
+    });
+  }
+
+  window.addEventListener('scroll', function() {
+    if (!ticking) {
+      requestAnimationFrame(function() {
+        updateActive();
+        ticking = false;
+      });
+      ticking = true;
+    }
+  }, { passive: true });
+
+  updateActive();
 });
 </script>

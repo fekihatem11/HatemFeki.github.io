@@ -153,4 +153,34 @@
             }, 100);
         });
     </script>
+
+    <!-- Scroll-driven radius/parallax -->
+    <script>
+    (function() {
+        var hero = document.getElementById('custom-hero');
+        if (!hero) return;
+
+        // Respect reduced motion
+        var prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        if (prefersReduced) return;
+
+        var ticking = false;
+
+        function onScroll() {
+            if (!ticking) {
+                requestAnimationFrame(function() {
+                    // Map scroll 0..60vh to progress 0..1
+                    var threshold = window.innerHeight * 0.6;
+                    var progress = Math.min(window.scrollY / threshold, 1);
+                    hero.style.setProperty('--scroll-progress', progress);
+                    ticking = false;
+                });
+                ticking = true;
+            }
+        }
+
+        window.addEventListener('scroll', onScroll, { passive: true });
+        onScroll(); // set initial state
+    })();
+    </script>
 </section>

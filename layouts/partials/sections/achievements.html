@@ -1,0 +1,151 @@
+{{ $sectionID := replace (lower .section.name) " " "-"  }}
+{{ if .section.id }}
+  {{ $sectionID = .section.id }}
+{{ end }}
+
+<div class="container-fluid anchor pb-5 achievements-section" id="{{ $sectionID }}">
+  {{ if not (.section.hideTitle) }}
+  <h1 class="text-center">{{ .section.name }}</h1>
+  {{ end }}
+
+  <div class="container">
+    <div class="award-stack-wrapper">
+      <div class="award-stack" id="award-stack">
+        {{ $total := len .achievements }}
+        {{ range $i, $a := .achievements }}
+        <div class="award-stack-card" data-index="{{ $i }}" data-proof="{{ $a.proof }}">
+          <span class="award-stack-label">Scholarship {{ add $i 1 }} / {{ $total }}</span>
+          <h3 class="award-stack-title">{{ $a.title }}</h3>
+          <p class="award-stack-issuer">{{ $a.issuer }}</p>
+          <div class="award-stack-proof-hint">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+              <polyline points="14 2 14 8 20 8"></polyline>
+            </svg>
+            <span>View Proof</span>
+          </div>
+        </div>
+        {{ end }}
+      </div>
+
+      <div class="award-stack-nav">
+        <button class="award-stack-btn" id="award-prev" aria-label="Previous award">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="19" y1="12" x2="5" y2="12"></line>
+            <polyline points="12 19 5 12 12 5"></polyline>
+          </svg>
+        </button>
+        <button class="award-stack-btn" id="award-next" aria-label="Next award">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="5" y1="12" x2="19" y2="12"></line>
+            <polyline points="12 5 19 12 12 19"></polyline>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+(function() {
+  // ── Stacked card carousel ──
+  var stack = document.getElementById('award-stack');
+  var cards = stack.querySelectorAll('.award-stack-card');
+  var prevBtn = document.getElementById('award-prev');
+  var nextBtn = document.getElementById('award-next');
+  var total = cards.length;
+  var current = 0;
+  var animating = false;
+
+  function layout() {
+    cards.forEach(function(card, i) {
+      // Position relative to current
+      var offset = (i - current + total) % total;
+      card.style.zIndex = total - offset;
+
+      if (offset === 0) {
+        // Front card
+        card.style.transform = 'translateY(0) scale(1)';
+        card.style.opacity = '1';
+        card.style.pointerEvents = 'auto';
+      } else if (offset === 1) {
+        // Second card (peeking behind)
+        card.style.transform = 'translateY(-24px) scale(0.94)';
+        card.style.opacity = '0.5';
+        card.style.pointerEvents = 'none';
+      } else if (offset === 2) {
+        // Third card (barely visible)
+        card.style.transform = 'translateY(-44px) scale(0.88)';
+        card.style.opacity = '0.25';
+        card.style.pointerEvents = 'none';
+      } else {
+        // Hidden
+        card.style.transform = 'translateY(-44px) scale(0.88)';
+        card.style.opacity = '0';
+        card.style.pointerEvents = 'none';
+      }
+    });
+  }
+
+  function goTo(index) {
+    if (animating) return;
+    animating = true;
+    current = ((index % total) + total) % total;
+    layout();
+    setTimeout(function() { animating = false; }, 400);
+  }
+
+  prevBtn.addEventListener('click', function() { goTo(current - 1); });
+  nextBtn.addEventListener('click', function() { goTo(current + 1); });
+
+  layout();
+
+  // ── PDF overlay (appended to body) ──
+  var overlay = document.createElement('div');
+  overlay.className = 'pdf-overlay';
+  overlay.innerHTML =
+    '<div class="pdf-overlay-header">' +
+      '<button class="pdf-overlay-close" aria-label="Close PDF viewer">' +
+        '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' +
+          '<line x1="18" y1="6" x2="6" y2="18"></line>' +
+          '<line x1="6" y1="6" x2="18" y2="18"></line>' +
+        '</svg>' +
+        '<span>Back to Portfolio</span>' +
+      '</button>' +
+    '</div>' +
+    '<iframe class="pdf-overlay-frame" src="" title="Award proof"></iframe>';
+
+  document.body.appendChild(overlay);
+
+  var frame = overlay.querySelector('.pdf-overlay-frame');
+  var closeBtn = overlay.querySelector('.pdf-overlay-close');
+
+  cards.forEach(function(card) {
+    card.addEventListener('click', function() {
+      var proof = this.getAttribute('data-proof');
+      if (!proof) return;
+      frame.src = proof;
+      overlay.classList.add('active');
+      document.body.style.overflow = 'hidden';
+    });
+  });
+
+  function closeOverlay() {
+    overlay.classList.remove('active');
+    document.body.style.overflow = '';
+    setTimeout(function() { frame.src = ''; }, 300);
+  }
+
+  closeBtn.addEventListener('click', closeOverlay);
+
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape' && overlay.classList.contains('active')) {
+      closeOverlay();
+    }
+  });
+
+  overlay.addEventListener('click', function(e) {
+    if (e.target === overlay) closeOverlay();
+  });
+})();
+</script>

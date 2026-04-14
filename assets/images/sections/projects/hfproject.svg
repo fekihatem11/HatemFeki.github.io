@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
+  <!-- Magnifying glass -->
+  <circle cx="42" cy="42" r="22" stroke="#F0C75E" stroke-width="4" fill="none"/>
+  <line x1="58" y1="58" x2="78" y2="78" stroke="#F0C75E" stroke-width="5" stroke-linecap="round"/>
+  <!-- Bar chart inside magnifying glass -->
+  <rect x="27" y="40" width="8" height="14" rx="1" fill="#F0C75E" opacity="0.85"/>
+  <rect x="38" y="30" width="8" height="24" rx="1" fill="#F0C75E" opacity="0.85"/>
+  <rect x="49" y="36" width="8" height="18" rx="1" fill="#F0C75E" opacity="0.85"/>
+</svg>

@@ -1,0 +1,52 @@
+<footer id="footer" class="container-fluid footer custom-footer">
+  <div class="custom-footer-content">
+    <h2 class="custom-footer-title">Let's talk</h2>
+    <p class="custom-footer-text">
+      Finishing my graduate studies this September and currently looking for a software engineering internship in Montreal.
+    </p>
+    <div class="custom-footer-buttons">
+      <a href="mailto:hatem.feki.1@ens.etsmtl.ca" class="btn-cursor-aware">
+        <span class="btn-fill"></span>
+        <span class="btn-text">Contact</span>
+      </a>
+      <a href="https://linkedin.com/in/fekihatem" target="_blank" rel="noopener" class="btn-cursor-aware">
+        <span class="btn-fill"></span>
+        <span class="btn-text">LinkedIn</span>
+      </a>
+    </div>
+  </div>
+  <div class="custom-footer-copy">
+    &copy; {{ now.Format "2006" }} Hatem Feki
+  </div>
+</footer>
+
+<script>
+(function() {
+  document.querySelectorAll('.custom-footer-buttons .btn-cursor-aware').forEach(function(btn) {
+    var fill = btn.querySelector('.btn-fill');
+
+    btn.addEventListener('mouseenter', function(e) {
+      var rect = btn.getBoundingClientRect();
+      var x = e.clientX - rect.left;
+      var y = e.clientY - rect.top;
+      fill.style.transition = 'none';
+      fill.style.left = x + 'px';
+      fill.style.top = y + 'px';
+      fill.style.transform = 'translate(-50%, -50%) scale(0)';
+      fill.offsetHeight;
+      fill.style.transition = 'transform 0.45s cubic-bezier(0.23, 1, 0.32, 1)';
+      fill.style.transform = 'translate(-50%, -50%) scale(1)';
+    });
+
+    btn.addEventListener('mouseleave', function(e) {
+      var rect = btn.getBoundingClientRect();
+      var x = e.clientX - rect.left;
+      var y = e.clientY - rect.top;
+      fill.style.left = x + 'px';
+      fill.style.top = y + 'px';
+      fill.style.transition = 'transform 0.35s cubic-bezier(0.23, 1, 0.32, 1)';
+      fill.style.transform = 'translate(-50%, -50%) scale(0)';
+    });
+  });
+})();
+</script>

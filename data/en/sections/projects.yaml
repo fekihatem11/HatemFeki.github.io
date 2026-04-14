@@ -1,9 +1,9 @@
 # section information
 section:
-  name: Projects
+  name: Project
   id: projects
   enable: true
-  weight: 5
+  weight: 3
   showOnNavbar: true
   # Can optionally hide the title in sections
   # hideTitle: true
@@ -21,45 +21,22 @@ buttons:
 
 # your projects
 projects:
-- name: Kubernetes
-  logo: /images/sections/projects/kubernetes.png
-  role: Contributor
-  timeline: "March 2018 - Present"
-  repo: https://github.com/kubernetes/kubernetes # If your project is a public repo on GitHub, then provide this link. it will show star count.
-  #url: ""  # If your project is not a public repo but it has a website or any external details url then provide it here. don't provide "repo" and "url" simultaneously.
-  summary: Production-Grade Container Scheduling and Management.
-  tags: ["professional", "kubernetes", "cloud"]
+- name: AccessLLM
+  logo: /images/sections/projects/accessllm/assets/logo.svg
+  url: "https://accessllm.ca"
+  summary: A multi-provider AI chat platform.
+  tags: ["professional"]
 
-- name: Tensorflow
-  logo: /images/sections/projects/tensorflow.png
-  role: Developer
-  timeline: "Jun 2018 - Present"
-  repo: https://github.com/tensorflow/tensorflow
-  #url: ""
-  summary: An Open Source Machine Learning Framework for Everyone.
-  tags: ["professional", "machine-learning"]
+- name: HFProject
+  logo: /images/sections/projects/hfproject.svg
+  url: "https://github.com/fekihatem11/Replication-Package-HFproject"
+  repo: https://github.com/fekihatem11/Replication-Package-HFproject
+  summary: Empirical study of Hugging Face trends, topics, and challenges on Stack Overflow.
+  tags: ["academic", "accepted-paper"]
 
-- name: A sample academic paper
-  role: Team Lead
-  timeline: "Jan 2017 - Nov 2017"
-  url: "https://www.example.com"
-  summary: Lorem ipsum dolor sit amet consectetur adipisicing elit. Sapiente eius reprehenderit animi suscipit autem eligendi esse amet aliquid error eum. Accusantium distinctio soluta aliquid quas placeat modi suscipit eligendi nisi.
-  tags: ["academic","iot"]
-
-- name: Nocode
-  logo: /images/sections/projects/no-code.png
-  role: Nothing
-  timeline: "Oct 2019 - Dec 2019"
-  repo: https://github.com/kelseyhightower/nocode
-  #url: ""
-  summary: The best way to write secure and reliable applications. Write nothing; deploy nowhere.
-  tags: ["hobby", "fun"]
-
-- name: Toha
-  logo: /images/sections/projects/toha.png
-  image: /images/sections/projects/toha_website.png
-  role: Owner
-  timeline: "Jun 2019 - Present"
-  repo: https://github.com/hossainemruz/toha
-  summary: A Hugo theme for personal portfolio.
-  tags: ["hobby","hugo","theme","professional"]
+- name: Espace ETS MCP
+  logo: /images/sections/projects/espace-ets-mcp.svg
+  url: "https://github.com/fekihatem11/espace-ets-mcp"
+  repo: https://github.com/fekihatem11/espace-ets-mcp
+  summary: MCP server for AI-powered discovery of 20k+ ETS research publications with hybrid search.
+  tags: ["hobby"]
