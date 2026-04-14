@@ -24,7 +24,7 @@ languages:
   en:
     languageCode: en
     languageName: English
-    title: "John's Blog"
+    title: "Hatem Feki"
     weight: 1
 
 # default language for the content
