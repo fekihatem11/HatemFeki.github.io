@@ -8,13 +8,13 @@ section:
 
 # Your scholarships
 achievements:
-- title: Mitacs Globalink Graduate Fellowship
-  issuer: Mitacs
-  proof: /files/mitacs-globalink.pdf
-
 - title: PBEEE Research Master's Scholarship
   issuer: Fonds de recherche du Québec (FRQNT)
   proof: /files/frqnt-pbeee.pdf
+
+- title: Mitacs Globalink Graduate Fellowship
+  issuer: Mitacs
+  proof: /files/mitacs-globalink.pdf
 
 - title: Tuition Exemption Scholarship
   issuer: MUTAN — Mission Universitaire de Tunisie
